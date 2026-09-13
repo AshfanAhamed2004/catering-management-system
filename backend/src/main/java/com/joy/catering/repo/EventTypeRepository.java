@@ -1,0 +1,1 @@
+package com.joy.catering.repo; import com.joy.catering.model.EventType; import java.util.*; import org.springframework.data.jpa.repository.JpaRepository; public interface EventTypeRepository extends JpaRepository<EventType,Long>{List<EventType> findAllByOrderByNameAsc(); Optional<EventType> findByName(String name);}

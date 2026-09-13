@@ -1,0 +1,1 @@
+package com.joy.catering.repo; import com.joy.catering.model.CustomerProfile; import org.springframework.data.jpa.repository.JpaRepository; public interface ProfileRepository extends JpaRepository<CustomerProfile,Long>{}

@@ -1,0 +1,2 @@
+package com.joy.catering.repo; import com.joy.catering.model.*; import java.util.*; import org.springframework.data.jpa.repository.JpaRepository;
+public interface PasswordResetRepository extends JpaRepository<PasswordReset,Long>{Optional<PasswordReset> findByTokenHashAndUsedFalseAndExpiresAtAfter(String h,java.time.OffsetDateTime t); List<PasswordReset> findByUserId(Long id);}

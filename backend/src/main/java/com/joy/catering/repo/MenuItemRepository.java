@@ -1,0 +1,1 @@
+package com.joy.catering.repo; import com.joy.catering.model.MenuItem; import java.util.*; import org.springframework.data.jpa.repository.JpaRepository; public interface MenuItemRepository extends JpaRepository<MenuItem,Long>{List<MenuItem> findByActiveTrueOrderByIdAsc(); List<MenuItem> findAllByOrderByIdAsc();}

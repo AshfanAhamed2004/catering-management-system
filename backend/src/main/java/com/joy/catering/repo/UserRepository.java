@@ -1,0 +1,2 @@
+package com.joy.catering.repo; import com.joy.catering.model.User; import java.util.*; import org.springframework.data.jpa.repository.JpaRepository;
+public interface UserRepository extends JpaRepository<User,Long>{Optional<User> findByEmail(String email); List<User> findAllByOrderByIdAsc();}

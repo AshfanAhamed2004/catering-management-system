@@ -1,0 +1,2 @@
+package com.joy.catering.repo; import com.joy.catering.model.*; import java.util.*; import org.springframework.data.jpa.repository.JpaRepository;
+public interface PackageRepository extends JpaRepository<PackageEntity,Long>{List<PackageEntity> findAllByOrderByIdAsc(); List<PackageEntity> findByActiveTrueOrderByIdAsc(); Optional<PackageEntity> findByName(String name);}

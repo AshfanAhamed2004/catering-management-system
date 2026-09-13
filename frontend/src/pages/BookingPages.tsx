@@ -1,0 +1,50 @@
+import { useEffect, useState, type FormEvent } from 'react';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { allPages, api, errorMessage } from '../api';
+import { displayDate, ErrorNote, Field, LoadState, money, PageTitle, Pager, StatusBadge, tomorrow, useData } from '../components';
+import type { Booking, Package } from '../types';
+import { useConfirmation } from '../confirmation';
+
+export function BookingList({staff = false}: {staff?: boolean}) {
+  const [page, setPage] = useState(0); const [status, setStatus] = useState('');
+  const result = useData<Booking[]>(`${staff ? '/staff' : ''}/bookings?offset=${page * 50}${status ? `&status=${status}` : ''}`);
+  return <><PageTitle eyebrow={staff ? 'Customer relations' : 'Your gatherings'} title={staff ? 'Booking requests' : 'My bookings'}>{!staff && <Link className="button" to="/packages">Plan an event ↗</Link>}</PageTitle>{staff && <Field label="Filter by status"><select value={status} onChange={e => {setStatus(e.target.value); setPage(0);}}><option value="">All requests</option>{['PENDING','APPROVED','REJECTED','CANCELLED'].map(s => <option key={s}>{s}</option>)}</select></Field>}<LoadState {...result}>{result.data?.length ? <div className="table-wrap"><table><thead><tr><th>Reference / package</th>{staff && <th>Customer</th>}<th>Event date</th><th>Guests</th><th>Status</th><th>Details</th></tr></thead><tbody>{result.data.map(b => <tr key={b.id}><td><strong>{b.reference}</strong><small>{b.package_name}</small></td>{staff && <td>{b.customer_name}</td>}<td>{displayDate(b.event_date)}</td><td>{b.guest_count}</td><td><StatusBadge status={b.status}/></td><td><Link to={`${staff ? '/staff' : ''}/bookings/${b.id}`} aria-label={`View ${b.reference}`}>View ↗</Link></td></tr>)}</tbody></table></div> : <div className="empty"><h2>No bookings here yet</h2><p>{staff ? 'Requests matching this filter will appear here.' : 'Choose a package to start planning your gathering.'}</p>{!staff && <Link to="/packages">Explore packages</Link>}</div>}<Pager page={page} setPage={setPage} count={result.data?.length || 0}/></LoadState></>;
+}
+
+export function BookingDetails({staff = false}: {staff?: boolean}) {
+  const confirm = useConfirmation();
+  const {id} = useParams(); const [params] = useSearchParams();
+  const result = useData<Booking>(`${staff ? '/staff' : ''}/bookings/${id}`);
+  const [error,setError] = useState(''); const [busy,setBusy] = useState(false); const [reason,setReason] = useState('');
+  async function action(action: 'cancel' | 'approve' | 'reject') {
+    if (!await confirm(`${action[0].toUpperCase() + action.slice(1)} this booking? This changes its recorded status.`)) return;
+    setBusy(true); setError('');
+    try { await api.post(`${action === 'cancel' ? '' : '/staff'}/bookings/${id}/${action}`, action === 'reject' ? {reason: reason || null} : undefined); result.reload(); }
+    catch(e) {setError(errorMessage(e)); result.reload();} finally {setBusy(false);}
+  }
+  const b = result.data;
+  return <><Link className="back" to={staff ? '/staff/bookings' : '/bookings'}>← {staff ? 'Booking requests' : 'My bookings'}</Link>{params.has('created') && <p className="notice" role="status">Booking submitted. Your reference is {b?.reference || 'loading…'}. Our team will review your request. <Link to="/bookings">My bookings</Link></p>}<ErrorNote message={error}/><LoadState {...result}>{b && <><PageTitle eyebrow="Booking details" title={b.reference}><StatusBadge status={b.status}/></PageTitle><div className="detail-grid"><section className="panel"><h2>{b.package_name}</h2><dl className="details"><div><dt>Event date</dt><dd>{displayDate(b.event_date)}</dd></div><div><dt>Time (Sri Lanka)</dt><dd>{b.event_time.slice(0,5)}</dd></div><div><dt>Location</dt><dd>{b.event_location}</dd></div><div><dt>Guests</dt><dd>{b.guest_count}</dd></div>{staff && <><div><dt>Customer</dt><dd>{b.customer_name}</dd></div><div><dt>Contact</dt><dd>{b.customer_email}<br/>{b.customer_mobile}</dd></div></>}</dl><h3>Special requirements</h3><p className="preserve">{b.special_requirements || 'No special requirements added.'}</p><h3>Selected menu</h3><ul>{b.menu_snapshot.map((name,i) => <li key={i}>{name}</li>)}</ul>{b.rejection_reason && <p className="notice">Review note: {b.rejection_reason}</p>}</section><aside className="panel summary"><p className="eyebrow">Package estimate</p><h2>{money(b.estimated_total)}</h2><p>{money(b.price_per_person)} × {b.guest_count} guests</p><small>Saved with your booking. Editing a pending request uses the package’s current price and menu.</small><hr/>{staff ? b.status === 'PENDING' && <><button disabled={busy} onClick={() => action('approve')}>Approve request</button><Field label="Rejection reason (optional)"><textarea maxLength={500} value={reason} onChange={e => setReason(e.target.value)}/></Field><button className="danger" disabled={busy} onClick={() => action('reject')}>Reject request</button></> : <>{b.status === 'PENDING' && <Link className="button" to={`/bookings/${b.id}/edit`}>Edit booking</Link>}{['PENDING','APPROVED'].includes(b.status) && <button className="danger" disabled={busy} onClick={() => action('cancel')}>Cancel booking</button>}<p>{b.status === 'PENDING' ? 'You can edit or cancel while your request is pending.' : b.status === 'APPROVED' ? 'Your request has been approved. Core details are now locked.' : 'This booking is read only.'}</p></>}</aside></div></>}</LoadState></>;
+}
+
+export function BookingEditor() {
+  const {id} = useParams(); const [params] = useSearchParams(); const navigate = useNavigate();
+  const [packages,setPackages] = useState<Package[]>([]); const [booking,setBooking] = useState<Booking | null>(null);
+  const [loading,setLoading] = useState(true); const [loadError,setLoadError] = useState(''); const [version,setVersion] = useState(0);
+  const [selected,setSelected] = useState(params.get('package') || ''); const [guests,setGuests] = useState('');
+  const [error,setError] = useState(''); const [busy,setBusy] = useState(false);
+  useEffect(() => { let live = true; setLoading(true); setLoadError('');
+    Promise.all([allPages<Package>('/packages'), id ? api.get<Booking>(`/bookings/${id}`).then(r => r.data) : Promise.resolve(null)])
+      .then(([p,b]) => {if (live) {setPackages(p); setBooking(b); if (b) {setSelected(String(b.package_id)); setGuests(String(b.guest_count));}}})
+      .catch(e => {if (live) setLoadError(errorMessage(e));}).finally(() => {if (live) setLoading(false);});
+    return () => {live = false;};
+  }, [id,version]);
+  const p = packages.find(p => String(p.id) === selected);
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault(); setBusy(true); setError('');
+    const fields = Object.fromEntries(new FormData(e.currentTarget));
+    const payload = {...fields, package_id: Number(selected), guest_count: Number(guests)};
+    try {const {data} = id ? await api.put<Booking>(`/bookings/${id}`,payload) : await api.post<Booking>('/bookings',payload); navigate(`/bookings/${data.id}${id ? '' : '?created=1'}`);}
+    catch(e) {setError(errorMessage(e));} finally {setBusy(false);}
+  }
+  return <><PageTitle eyebrow="Let's plan something special" title={id ? 'Edit your booking' : 'Your next gathering'}/><LoadState loading={loading} error={loadError} reload={() => setVersion(v => v+1)}>{booking && booking.status !== 'PENDING' ? <p className="empty">Only pending bookings can be edited. <Link to={`/bookings/${id}`}>View booking</Link></p> : packages.length === 0 ? <p className="empty">No packages are currently available. Please check back later.</p> : <div className="detail-grid"><form className="panel" onSubmit={submit}><Field label="Catering package"><select name="package_id" required value={selected} onChange={e => setSelected(e.target.value)}><option value="">Select a package</option>{booking && !packages.some(p => p.id === booking.package_id) && <option value={booking.package_id} disabled>{booking.package_name} — unavailable; choose another</option>}{packages.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select></Field><div className="form-row"><Field label="Event date"><input type="date" name="event_date" defaultValue={booking?.event_date} min={tomorrow()} required/></Field><Field label="Event time (Sri Lanka)"><input type="time" name="event_time" defaultValue={booking?.event_time.slice(0,5)} required/></Field></div><Field label="Event location"><input name="event_location" defaultValue={booking?.event_location} placeholder="Venue name and address" minLength={3} maxLength={500} required/></Field><Field label="Number of guests"><input name="guest_count" type="number" value={guests} onChange={e => setGuests(e.target.value)} min={p?.minimum_guest_count || 1} max={p?.maximum_guest_count || 100000} required step={1}/>{p && <small>{p.minimum_guest_count} minimum{p.maximum_guest_count ? ` · ${p.maximum_guest_count} maximum` : ''}</small>}</Field><Field label="Special requirements (optional)"><textarea name="special_requirements" defaultValue={booking?.special_requirements} maxLength={2000} placeholder="Dietary needs or anything else we should know"/></Field><ErrorNote message={error}/><div className="actions"><button disabled={busy || !p}>{busy ? 'Saving…' : id ? 'Save changes' : 'Submit booking request'}</button><Link to={id ? `/bookings/${id}` : '/packages'}>Go back</Link></div></form><aside className="panel summary"><p className="eyebrow">Your table, at a glance</p><h2>{p?.name || 'Choose your package'}</h2>{p && <><p>{money(p.price_per_person)} per guest</p><hr/><h2>{money(Number(p.price_per_person) * Number(guests || 0))}</h2><p>Estimated package total</p></>}<small>{id ? 'Saving updates the price and menu to the current package.' : 'Your booking starts as pending until our team reviews it.'}</small></aside></div>}</LoadState></>;
+}

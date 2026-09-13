@@ -1,0 +1,4 @@
+package com.joy.catering.model;
+public enum Role {
+    CUSTOMER, CUSTOMER_RELATIONS_OFFICER, SENIOR_CHEF, OPERATIONS_MANAGER, ACCOUNTS_EXECUTIVE, ADMIN
+}

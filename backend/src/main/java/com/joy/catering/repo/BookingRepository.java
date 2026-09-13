@@ -1,0 +1,2 @@
+package com.joy.catering.repo; import com.joy.catering.model.*; import java.util.*; import org.springframework.data.jpa.repository.JpaRepository;
+public interface BookingRepository extends JpaRepository<Booking,Long>{List<Booking> findByCustomerIdOrderByCreatedAtDescIdDesc(Long id); List<Booking> findAllByOrderByCreatedAtDescIdDesc(); List<Booking> findByStatusOrderByCreatedAtDescIdDesc(BookingStatus s);}
