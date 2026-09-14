@@ -20,5 +20,11 @@ public final class Dtos {
  public record PackageOut(Long id,String name,String description,Long eventTypeId,EventTypeOut eventType,BigDecimal pricePerPerson,int minimumGuestCount,Integer maximumGuestCount,boolean isActive,List<MenuOut> menuItems){}
  public record BookingOut(Long id,String reference,Long packageId,String packageName,List<String> menuSnapshot,BigDecimal pricePerPerson,BigDecimal estimatedTotal,LocalDate eventDate,LocalTime eventTime,String eventLocation,int guestCount,String specialRequirements,BookingStatus status,String rejectionReason,OffsetDateTime createdAt,OffsetDateTime updatedAt){}
  public record StaffBookingOut(Long id,String reference,Long packageId,String packageName,List<String> menuSnapshot,BigDecimal pricePerPerson,BigDecimal estimatedTotal,LocalDate eventDate,LocalTime eventTime,String eventLocation,int guestCount,String specialRequirements,BookingStatus status,String rejectionReason,OffsetDateTime createdAt,OffsetDateTime updatedAt,Long customerId,String customerName,String customerEmail,String customerMobile){}
+ public record FeedbackInput(@NotNull @Min(1) @Max(5) Integer rating, @Size(max=2000) String comment, List<FeedbackCategory> categories){}
+ public record FeedbackUpdate(@NotNull @Min(1) @Max(5) Integer rating, @Size(max=2000) String comment, List<FeedbackCategory> categories){}
+ public record StaffFeedbackUpdate(FeedbackStatus status, List<FeedbackCategory> categories, @Size(max=2000) String staffResponse){}
+ public record FeedbackOut(Long id, Long bookingId, String bookingReference, int rating, String comment, List<FeedbackCategory> categories, String staffResponse, FeedbackStatus status, OffsetDateTime createdAt, OffsetDateTime updatedAt){}
+ public record StaffFeedbackOut(Long id, Long bookingId, String bookingReference, int rating, String comment, List<FeedbackCategory> categories, String staffResponse, FeedbackStatus status, OffsetDateTime createdAt, OffsetDateTime updatedAt, Long customerId, String customerName, String customerEmail, String customerMobile){}
+ public record FeedbackReportOut(long totalFeedback, double averageRating, long lowRatingCount, Map<Integer, Long> ratingDistribution, Map<FeedbackCategory, Long> categoryBreakdown, long newFeedbackCount, long unresolvedFeedbackCount){}
  private Dtos(){}
 }

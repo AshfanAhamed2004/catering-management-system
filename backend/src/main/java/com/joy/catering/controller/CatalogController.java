@@ -1,5 +1,5 @@
 package com.joy.catering.controller;
-import com.joy.catering.*;import com.joy.catering.dto.Dtos.*;import com.joy.catering.model.*;import com.joy.catering.repo.*;import com.joy.catering.service.CatalogService;import jakarta.validation.Valid;import org.springframework.data.domain.*;import org.springframework.http.*;import org.springframework.security.access.prepost.PreAuthorize;import org.springframework.web.bind.annotation.*;import java.util.*;
+import com.joy.catering.*;import com.joy.catering.Mapping;import com.joy.catering.dto.Dtos.*;import com.joy.catering.model.*;import com.joy.catering.repo.*;import com.joy.catering.service.CatalogService;import jakarta.validation.Valid;import org.springframework.data.domain.*;import org.springframework.http.*;import org.springframework.security.access.prepost.PreAuthorize;import org.springframework.web.bind.annotation.*;import java.util.*;
 @RestController public class CatalogController {
  final EventTypeRepository events;final MenuItemRepository menus;final PackageRepository packages;final CatalogService service;
  public CatalogController(EventTypeRepository e,MenuItemRepository m,PackageRepository p,CatalogService s){events=e;menus=m;packages=p;service=s;}

@@ -1,6 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { api, errorMessage } from './api';
-import type { Status } from './types';
 
 export function useData<T>(path: string) {
   const [data, setData] = useState<T | null>(null);
@@ -24,7 +23,7 @@ export function LoadState({loading, error, reload, children}: {loading: boolean;
 }
 export function ErrorNote({message}: {message: string}) { return message ? <p role="alert" className="error">{message}</p> : null; }
 export function Field({label, children}: {label: string; children: ReactNode}) { return <label className="field"><span>{label}</span>{children}</label>; }
-export function StatusBadge({status}: {status: Status}) { return <span className={`badge ${status.toLowerCase()}`}>{status.toLowerCase()}</span>; }
+export function StatusBadge({status}: {status: string}) { return <span className={`badge ${status.toLowerCase()}`}>{status.toLowerCase()}</span>; }
 export function PageTitle({eyebrow, title, children}: {eyebrow?: string; title: string; children?: ReactNode}) { return <div className="page-title"><div>{eyebrow && <p className="eyebrow">{eyebrow}</p>}<h1>{title}</h1></div>{children}</div>; }
 export function Pager({page, setPage, count}: {page: number; setPage: (value: number) => void; count: number}) { return <div className="pager"><button className="secondary" disabled={page === 0} onClick={() => setPage(page - 1)}>Previous</button><span>Page {page + 1}</span><button className="secondary" disabled={count < 50} onClick={() => setPage(page + 1)}>Next</button></div>; }
 export const money = (value: string | number) => new Intl.NumberFormat('en-LK', {style: 'currency', currency: 'LKR', maximumFractionDigits: 2}).format(Number(value));
