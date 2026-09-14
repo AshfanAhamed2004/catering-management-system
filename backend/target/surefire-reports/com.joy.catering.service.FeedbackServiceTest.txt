@@ -1,4 +1,39 @@
 -------------------------------------------------------------------------------
 Test set: com.joy.catering.service.FeedbackServiceTest
 -------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.418 s -- in com.joy.catering.service.FeedbackServiceTest
+Tests run: 7, Failures: 1, Errors: 2, Skipped: 0, Time elapsed: 1.609 s <<< FAILURE! -- in com.joy.catering.service.FeedbackServiceTest
+com.joy.catering.service.FeedbackServiceTest.submitFeedback_validationFailsForLowRatingWithoutComment -- Time elapsed: 0.019 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <422 UNPROCESSABLE_ENTITY> but was: <409 CONFLICT>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:177)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1145)
+	at com.joy.catering.service.FeedbackServiceTest.submitFeedback_validationFailsForLowRatingWithoutComment(FeedbackServiceTest.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+com.joy.catering.service.FeedbackServiceTest.submitFeedback_success -- Time elapsed: 0.004 s <<< ERROR!
+com.joy.catering.ApiException: Feedback can only be submitted for COMPLETED bookings
+	at com.joy.catering.service.FeedbackService.submitFeedback(FeedbackService.java:36)
+	at com.joy.catering.service.FeedbackServiceTest.submitFeedback_success(FeedbackServiceTest.java:60)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+com.joy.catering.service.FeedbackServiceTest.submitFeedback_failsIfDuplicate -- Time elapsed: 0.009 s <<< ERROR!
+org.mockito.exceptions.misusing.UnnecessaryStubbingException: 
+
+Unnecessary stubbings detected.
+Clean & maintainable test code requires zero unnecessary code.
+Following stubbings are unnecessary (click to navigate to relevant line of code):
+  1. -> at com.joy.catering.service.FeedbackServiceTest.submitFeedback_failsIfDuplicate(FeedbackServiceTest.java:89)
+Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.
+	at org.mockito.junit.jupiter.MockitoExtension.lambda$afterEach$2(MockitoExtension.java:200)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at org.mockito.junit.jupiter.MockitoExtension.afterEach(MockitoExtension.java:198)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
