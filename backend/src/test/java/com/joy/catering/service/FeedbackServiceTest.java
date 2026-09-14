@@ -43,7 +43,7 @@ public class FeedbackServiceTest {
         booking = new Booking();
         booking.setId(10L);
         booking.setCustomer(customer);
-        booking.setStatus(BookingStatus.APPROVED);
+        booking.setStatus(BookingStatus.COMPLETED);
         booking.setEventDate(LocalDate.now().minusDays(1)); // Past event
     }
 
@@ -64,7 +64,7 @@ public class FeedbackServiceTest {
     }
 
     @Test
-    void submitFeedback_failsIfNotApproved() {
+    void submitFeedback_failsIfNotCompleted() {
         booking.setStatus(BookingStatus.PENDING);
         when(bookingService.own(10L, 1L)).thenReturn(booking);
 

@@ -57,7 +57,8 @@ export type Status =
   | 'PENDING'
   | 'APPROVED'
   | 'REJECTED'
-  | 'CANCELLED';
+  | 'CANCELLED'
+  | 'COMPLETED';
 
 export interface EventType {
   id: number;
