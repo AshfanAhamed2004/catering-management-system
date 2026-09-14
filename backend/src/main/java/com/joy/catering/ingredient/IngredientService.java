@@ -1,36 +1,59 @@
 package com.joy.catering.ingredient;
 
-import java.util.HashMap;
+import org.springframework.stereotype.Service;
+
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ * Service class handling business logic for Ingredient Forecasting.
+ */
+@Service
 public class IngredientService {
 
-    /**
-     * Calculates required ingredient quantities based on expected guest count.
-     *
-     * @param ingredientName Name of the ingredient (e.g., Rice, Chicken)
-     * @param baseAmountPerGuest Quantity needed per single guest (in kg or units)
-     * @param guestCount Total number of guests expected
-     * @return Total quantity needed for the event
-     */
-    public double calculateRequiredQuantity(String ingredientName, double baseAmountPerGuest, int guestCount) {
-        if (guestCount <= 0 || baseAmountPerGuest <= 0) {
-            return 0.0;
-        }
-        return baseAmountPerGuest * guestCount;
+    private final IngredientRepository ingredientRepository;
+
+    public IngredientService(IngredientRepository ingredientRepository) {
+        this.ingredientRepository = ingredientRepository;
     }
 
     /**
-     * Generates a sample forecast map for standard event items.
+     * Calculates the required quantity of each ingredient based on guest count.
+     * Formula: Required Quantity = guestCount * quantityPerGuest
+     *
+     * @param guestCount Total number of guests expected
+     * @return Map of ingredient name -> total required quantity
+     */
+    public Map<String, Double> calculateRequiredIngredients(int guestCount) {
+        Map<String, Double> forecast = new LinkedHashMap<>();
+
+        if (guestCount <= 0) {
+            return forecast;
+        }
+
+        List<Ingredient> ingredients = ingredientRepository.findAll();
+
+        if (!ingredients.isEmpty()) {
+            // Calculate using database ingredients
+            for (Ingredient ingredient : ingredients) {
+                double required = guestCount * ingredient.getQuantityPerGuest();
+                forecast.put(ingredient.getName() + " (" + ingredient.getUnit() + ")", required);
+            }
+        } else {
+            // Default sample proportions if the database is not yet populated
+            forecast.put("Rice (kg)", guestCount * 0.15);
+            forecast.put("Chicken (kg)", guestCount * 0.20);
+            forecast.put("Vegetables (kg)", guestCount * 0.10);
+        }
+
+        return forecast;
+    }
+
+    /**
+     * Alias method for backward compatibility with existing calls.
      */
     public Map<String, Double> generateEventForecast(int guestCount) {
-        Map<String, Double> forecastMap = new HashMap<>();
-
-        // Base proportions per guest (e.g., 0.15 kg rice, 0.20 kg chicken per person)
-        forecastMap.put("Rice (kg)", calculateRequiredQuantity("Rice", 0.15, guestCount));
-        forecastMap.put("Chicken (kg)", calculateRequiredQuantity("Chicken", 0.20, guestCount));
-        forecastMap.put("Vegetables (kg)", calculateRequiredQuantity("Vegetables", 0.10, guestCount));
-
-        return forecastMap;
+        return calculateRequiredIngredients(guestCount);
     }
 }
