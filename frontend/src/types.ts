@@ -1,4 +1,4 @@
-export type FeedbackStatus = 'NEW' | 'IN_REVIEW' | 'RESOLVED' | 'CLOSED';
+export type FeedbackStatus = 'SUBMITTED' | 'UNDER_REVIEW' | 'RESPONDED' | 'RESOLVED' | 'ARCHIVED';
 
 export interface Feedback {
   id: number;
@@ -32,7 +32,7 @@ export interface FeedbackReportOut {
   low_rating_count: number;
   rating_distribution: Record<number, number>;
   category_breakdown: Record<string, number>;
-  new_feedback_count: number;
+  submitted_feedback_count: number;
   unresolved_feedback_count: number;
 }
 

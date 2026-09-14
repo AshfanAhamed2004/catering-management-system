@@ -36,5 +36,16 @@ public class Feedback extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private FeedbackStatus status = FeedbackStatus.NEW;
+    private FeedbackStatus status = FeedbackStatus.SUBMITTED;
+
+    @PostLoad
+    public void migrateLegacyStatus() {
+        if (this.status == FeedbackStatus.NEW) {
+            this.status = FeedbackStatus.SUBMITTED;
+        } else if (this.status == FeedbackStatus.IN_REVIEW) {
+            this.status = FeedbackStatus.UNDER_REVIEW;
+        } else if (this.status == FeedbackStatus.CLOSED) {
+            this.status = FeedbackStatus.ARCHIVED;
+        }
+    }
 }

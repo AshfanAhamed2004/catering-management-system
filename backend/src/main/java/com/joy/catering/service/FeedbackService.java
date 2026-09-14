@@ -53,7 +53,7 @@ public class FeedbackService {
         feedback.setRating(input.rating());
         feedback.setComment(input.comment());
         feedback.setCategories(input.categories() == null ? new java.util.ArrayList<>() : input.categories());
-        feedback.setStatus(FeedbackStatus.NEW);
+        feedback.setStatus(FeedbackStatus.SUBMITTED);
         
         return feedbackRepo.save(feedback);
     }
@@ -63,8 +63,8 @@ public class FeedbackService {
                 .filter(f -> f.getCustomer().getId().equals(customerId))
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Feedback not found"));
 
-        if (feedback.getStatus() != FeedbackStatus.NEW) {
-            throw new ApiException(HttpStatus.CONFLICT, "Only NEW feedback can be edited");
+        if (feedback.getStatus() != FeedbackStatus.SUBMITTED) {
+            throw new ApiException(HttpStatus.CONFLICT, "Only SUBMITTED feedback can be edited");
         }
 
         validateFeedbackData(input.rating(), input.comment());
@@ -80,14 +80,33 @@ public class FeedbackService {
         Feedback feedback = feedbackRepo.findById(feedbackId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Feedback not found"));
 
-        if (input.status() != null) {
-            feedback.setStatus(input.status());
-        }
         if (input.categories() != null) {
             feedback.setCategories(input.categories());
         }
+
         if (input.staffResponse() != null) {
             feedback.setStaffResponse(input.staffResponse());
+        }
+
+        if (input.status() != null && input.status() != feedback.getStatus()) {
+            FeedbackStatus current = feedback.getStatus();
+            FeedbackStatus next = input.status();
+
+            boolean valid = false;
+            if (current == FeedbackStatus.SUBMITTED && next == FeedbackStatus.UNDER_REVIEW) valid = true;
+            else if (current == FeedbackStatus.UNDER_REVIEW && next == FeedbackStatus.RESPONDED) {
+                if (feedback.getStaffResponse() == null || feedback.getStaffResponse().trim().isEmpty()) {
+                    throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "Response text is required to mark as RESPONDED");
+                }
+                valid = true;
+            }
+            else if (current == FeedbackStatus.RESPONDED && next == FeedbackStatus.RESOLVED) valid = true;
+            else if (current == FeedbackStatus.RESOLVED && next == FeedbackStatus.ARCHIVED) valid = true;
+
+            if (!valid) {
+                throw new ApiException(HttpStatus.CONFLICT, "Invalid status transition from " + current + " to " + next);
+            }
+            feedback.setStatus(next);
         }
         
         return feedbackRepo.save(feedback);
@@ -100,9 +119,9 @@ public class FeedbackService {
         long low = all.stream().filter(f -> f.getRating() <= 2).count();
         java.util.Map<Integer, Long> dist = all.stream().collect(java.util.stream.Collectors.groupingBy(Feedback::getRating, java.util.stream.Collectors.counting()));
         java.util.Map<FeedbackCategory, Long> catDist = all.stream().flatMap(f -> f.getCategories().stream()).collect(java.util.stream.Collectors.groupingBy(c -> c, java.util.stream.Collectors.counting()));
-        long newCount = all.stream().filter(f -> f.getStatus() == FeedbackStatus.NEW).count();
-        long inReview = all.stream().filter(f -> f.getStatus() == FeedbackStatus.IN_REVIEW).count();
+        long submittedCount = all.stream().filter(f -> f.getStatus() == FeedbackStatus.SUBMITTED).count();
+        long underReviewCount = all.stream().filter(f -> f.getStatus() == FeedbackStatus.UNDER_REVIEW).count();
 
-        return new FeedbackReportOut(total, avg, low, dist, catDist, newCount, newCount + inReview);
+        return new FeedbackReportOut(total, avg, low, dist, catDist, submittedCount, submittedCount + underReviewCount);
     }
 }

@@ -82,7 +82,7 @@ export function FeedbackDetail() {
           <p><strong>Categories:</strong> {f.categories.join(', ')}</p>
           <p><strong>Status:</strong> {f.status}</p>
           {f.staff_response && <p><strong>Staff response:</strong> {f.staff_response}</p>}
-          {f.status === 'NEW' && !editMode && (
+          {f.status === 'SUBMITTED' && !editMode && (
             <button className="secondary" onClick={() => setEditMode(true)}>Edit feedback</button>
           )}
           {editMode && (

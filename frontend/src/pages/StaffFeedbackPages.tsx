@@ -39,10 +39,11 @@ export function StaffFeedbackQueue() {
           <Field label="Status">
             <select value={status} onChange={e => updateFilter('status', e.target.value)}>
               <option value="">All</option>
-              <option value="NEW">New</option>
-              <option value="IN_REVIEW">In Review</option>
+              <option value="SUBMITTED">Submitted</option>
+              <option value="UNDER_REVIEW">Under Review</option>
+              <option value="RESPONDED">Responded</option>
               <option value="RESOLVED">Resolved</option>
-              <option value="CLOSED">Closed</option>
+              <option value="ARCHIVED">Archived</option>
             </select>
           </Field>
           <Field label="Rating">
@@ -170,11 +171,12 @@ export function StaffFeedbackDetail() {
               <h3>Resolution Workflow</h3>
               <form onSubmit={submit}>
                 <Field label="Status">
-                  <select name="status" defaultValue={f.status}>
-                    <option value="NEW">New</option>
-                    <option value="IN_REVIEW">In Review</option>
-                    <option value="RESOLVED">Resolved</option>
-                    <option value="CLOSED">Closed</option>
+                  <select name="status" defaultValue={f.status} disabled={f.status === 'ARCHIVED'}>
+                    <option value={f.status}>{f.status.replace('_', ' ')}</option>
+                    {f.status === 'SUBMITTED' && <option value="UNDER_REVIEW">Under Review</option>}
+                    {f.status === 'UNDER_REVIEW' && <option value="RESPONDED">Responded</option>}
+                    {f.status === 'RESPONDED' && <option value="RESOLVED">Resolved</option>}
+                    {f.status === 'RESOLVED' && <option value="ARCHIVED">Archived</option>}
                   </select>
                 </Field>
                 
@@ -232,7 +234,7 @@ export function StaffFeedbackReport() {
             <div className="panel">
               <h3>Action Required</h3>
               <h2>{result.data.unresolved_feedback_count}</h2>
-              <small>{result.data.new_feedback_count} new</small>
+              <small>{result.data.submitted_feedback_count} submitted</small>
             </div>
             
             <div className="panel" style={{gridColumn: '1 / -1'}}>

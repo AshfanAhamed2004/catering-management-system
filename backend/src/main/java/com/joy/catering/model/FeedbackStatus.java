@@ -1,4 +1,8 @@
 package com.joy.catering.model;
 public enum FeedbackStatus {
-    NEW, IN_REVIEW, RESOLVED, CLOSED
+    // Legacy statuses for safe DB deserialization
+    @Deprecated NEW, @Deprecated IN_REVIEW, @Deprecated CLOSED,
+    
+    // Target workflow
+    SUBMITTED, UNDER_REVIEW, RESPONDED, RESOLVED, ARCHIVED
 }

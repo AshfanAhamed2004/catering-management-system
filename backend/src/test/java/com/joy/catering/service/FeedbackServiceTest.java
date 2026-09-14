@@ -107,22 +107,60 @@ public class FeedbackServiceTest {
     void updateStaffFeedback_success() {
         Feedback f = new Feedback();
         f.setId(50L);
-        f.setStatus(FeedbackStatus.NEW);
+        f.setStatus(FeedbackStatus.SUBMITTED);
 
         when(feedbackRepo.findById(50L)).thenReturn(Optional.of(f));
         when(feedbackRepo.save(any())).thenReturn(f);
 
-        StaffFeedbackUpdate update = new StaffFeedbackUpdate(FeedbackStatus.IN_REVIEW, null, "We are looking into this");
+        StaffFeedbackUpdate update = new StaffFeedbackUpdate(FeedbackStatus.UNDER_REVIEW, null, null);
         Feedback updated = feedbackService.updateStaffFeedback(50L, update);
 
-        assertEquals(FeedbackStatus.IN_REVIEW, updated.getStatus());
-        assertEquals("We are looking into this", updated.getStaffResponse());
+        assertEquals(FeedbackStatus.UNDER_REVIEW, updated.getStatus());
+    }
+
+    @Test
+    void updateStaffFeedback_failsIfRespondedWithoutText() {
+        Feedback f = new Feedback();
+        f.setId(50L);
+        f.setStatus(FeedbackStatus.UNDER_REVIEW);
+
+        when(feedbackRepo.findById(50L)).thenReturn(Optional.of(f));
+
+        StaffFeedbackUpdate update = new StaffFeedbackUpdate(FeedbackStatus.RESPONDED, null, "   ");
+        ApiException ex = assertThrows(ApiException.class, () -> feedbackService.updateStaffFeedback(50L, update));
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, ex.getStatus());
+    }
+
+    @Test
+    void updateStaffFeedback_failsIfInvalidTransition() {
+        Feedback f = new Feedback();
+        f.setId(50L);
+        f.setStatus(FeedbackStatus.SUBMITTED);
+
+        when(feedbackRepo.findById(50L)).thenReturn(Optional.of(f));
+
+        StaffFeedbackUpdate update = new StaffFeedbackUpdate(FeedbackStatus.RESOLVED, null, null);
+        ApiException ex = assertThrows(ApiException.class, () -> feedbackService.updateStaffFeedback(50L, update));
+        assertEquals(HttpStatus.CONFLICT, ex.getStatus());
+    }
+
+    @Test
+    void editFeedback_failsIfUnderReview() {
+        Feedback f = new Feedback();
+        f.setId(50L);
+        f.setCustomer(customer);
+        f.setStatus(FeedbackStatus.UNDER_REVIEW);
+        
+        when(feedbackRepo.findById(50L)).thenReturn(Optional.of(f));
+        FeedbackUpdate update = new FeedbackUpdate(5, "Updated", null);
+        ApiException ex = assertThrows(ApiException.class, () -> feedbackService.editFeedback(50L, 1L, update));
+        assertEquals(HttpStatus.CONFLICT, ex.getStatus());
     }
 
     @Test
     void getFeedbackReport_calculatesCorrectly() {
-        Feedback f1 = new Feedback(); f1.setRating(5); f1.setStatus(FeedbackStatus.NEW); f1.setCategories(List.of(FeedbackCategory.FOOD_QUALITY));
-        Feedback f2 = new Feedback(); f2.setRating(2); f2.setStatus(FeedbackStatus.IN_REVIEW); f2.setCategories(List.of(FeedbackCategory.SERVICE));
+        Feedback f1 = new Feedback(); f1.setRating(5); f1.setStatus(FeedbackStatus.SUBMITTED); f1.setCategories(List.of(FeedbackCategory.FOOD_QUALITY));
+        Feedback f2 = new Feedback(); f2.setRating(2); f2.setStatus(FeedbackStatus.UNDER_REVIEW); f2.setCategories(List.of(FeedbackCategory.SERVICE));
         Feedback f3 = new Feedback(); f3.setRating(2); f3.setStatus(FeedbackStatus.RESOLVED); f3.setCategories(List.of(FeedbackCategory.FOOD_QUALITY));
 
         when(feedbackRepo.findAll()).thenReturn(List.of(f1, f2, f3));
@@ -131,8 +169,8 @@ public class FeedbackServiceTest {
         assertEquals(3, report.totalFeedback());
         assertEquals(3.0, report.averageRating());
         assertEquals(2, report.lowRatingCount());
-        assertEquals(1, report.newFeedbackCount());
-        assertEquals(2, report.unresolvedFeedbackCount()); // 1 NEW + 1 IN_REVIEW
+        assertEquals(1, report.submittedFeedbackCount());
+        assertEquals(2, report.unresolvedFeedbackCount()); // 1 SUBMITTED + 1 UNDER_REVIEW
         assertEquals(2, report.categoryBreakdown().get(FeedbackCategory.FOOD_QUALITY));
         assertEquals(1, report.categoryBreakdown().get(FeedbackCategory.SERVICE));
         assertEquals(2, report.ratingDistribution().get(2));
