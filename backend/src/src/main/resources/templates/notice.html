@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Shift Notice Details')}">
+  <title>Shift Notice Details</title>
+</head>
+<body>
+  <div th:replace="~{fragments/layout :: header('my-schedule')}"></div>
+
+  <main class="narrow">
+    <div class="card">
+      <div class="eyebrow">OFFICIAL SHIFT NOTICE</div>
+      <h1 style="margin: 4px 0 16px;">Notice Details</h1>
+
+      <dl>
+        <dt>Event</dt>
+        <dd>
+          <strong th:text="${notice.eventReference}">EVT-001</strong> &mdash;
+          <span th:text="${notice.eventName}">Event Name</span>
+        </dd>
+
+        <dt>Staff Member</dt>
+        <dd th:text="${notice.staffName}">Jane Doe</dd>
+
+        <dt>Role &amp; Area</dt>
+        <dd>
+          <span class="badge" th:text="${notice.category}">SERVER</span>
+          <span class="muted small" th:text="${notice.area}">EVENT</span>
+        </dd>
+
+        <dt>Shift Starts</dt>
+        <dd><strong th:text="${#temporals.format(notice.startsAt, 'EEE, MMM dd, yyyy HH:mm')}">Starts</strong></dd>
+
+        <dt>Shift Ends</dt>
+        <dd><strong th:text="${#temporals.format(notice.endsAt, 'EEE, MMM dd, yyyy HH:mm')}">Ends</strong></dd>
+
+        <dt>Delivery Status</dt>
+        <dd><span class="badge" th:text="${notice.deliveryStatus}">DELIVERED</span></dd>
+
+        <dt>Acknowledgment</dt>
+        <dd>
+          <span class="badge"
+                th:classappend="${notice.acknowledgmentStatus == 'ACKNOWLEDGED'} ? 'badge-published' : 'badge-draft'"
+                th:text="${notice.acknowledgmentStatus}">PENDING</span>
+        </dd>
+      </dl>
+
+      <div th:if="${notice.acknowledgmentStatus == 'PENDING' and notice.deliveryStatus == 'DELIVERED'}" style="margin-top: 24px;">
+        <form th:action="@{'/staff/notices/' + ${notice.id} + '/acknowledge'}" method="post">
+          <button type="submit" class="button" style="width: 100%;">Acknowledge Shift Assignment</button>
+        </form>
+      </div>
+
+      <div class="actions" style="margin-top: 20px;">
+        <a th:href="@{/staff/schedules}" class="button secondary btn-sm">&larr; Back to My Schedule</a>
+      </div>
+    </div>
+  </main>
+
+  <div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

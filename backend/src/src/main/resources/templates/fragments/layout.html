@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${title != null ? title + ' — SmartServe Staff Scheduling' : 'SmartServe Staff Scheduling'}">SmartServe Staff Scheduling</title>
+  <link rel="stylesheet" th:href="@{/css/fonts.css}">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <link rel="stylesheet" th:href="@{/css/scheduling-ui.css}">
+</head>
+<body>
+
+  <!-- Shared Header -->
+  <header th:fragment="header(activeTab)" id="main-header"
+          th:data-user-role="${currentUserRole}"
+          th:data-user-email="${currentUserEmail}"
+          th:data-staff-id="${currentStaffId}">
+    <a th:href="@{/}" class="brand">SmartServe <span>Staff</span><small>SCHEDULING &amp; RESOURCE ALLOCATION</small></a>
+
+    <nav>
+      <!-- Manager / Admin Navigation -->
+      <th:block sec:authorize="hasAnyRole('OPERATIONS_MANAGER', 'ADMIN')">
+        <a th:href="@{/manager}" th:classappend="${activeTab == 'scheduling'} ? 'fw-bold' : ''">Scheduling</a>
+        <a th:href="@{/manager/availability}" th:classappend="${activeTab == 'availability'} ? 'fw-bold' : ''">Availability</a>
+        <a th:href="@{/manager/resources}" th:classappend="${activeTab == 'resources'} ? 'fw-bold' : ''">Resources</a>
+        <a th:href="@{/manager/staff}" th:classappend="${activeTab == 'staff'} ? 'fw-bold' : ''">Staff</a>
+        <a th:href="@{/manager/calendar}" th:classappend="${activeTab == 'calendar'} ? 'fw-bold' : ''">Calendar</a>
+        <a th:href="@{/manager/history}" th:classappend="${activeTab == 'history'} ? 'fw-bold' : ''">Audit</a>
+      </th:block>
+
+      <!-- Staff Navigation -->
+      <th:block sec:authorize="hasRole('STAFF')">
+        <a th:href="@{/staff/schedules}" th:classappend="${activeTab == 'my-schedule'} ? 'fw-bold' : ''">My Schedule</a>
+        <a th:href="@{/staff/availability}" th:classappend="${activeTab == 'my-availability'} ? 'fw-bold' : ''">My Availability</a>
+      </th:block>
+
+      <!-- User Info & Logout -->
+      <th:block sec:authorize="isAuthenticated()">
+        <span class="badge" th:text="${currentUserRole}">ROLE</span>
+        <small class="muted" th:text="${currentStaffName ?: currentUserEmail}">user</small>
+        <form th:action="@{/logout}" method="post" class="inline" style="display:inline;">
+          <button type="submit" class="link">Sign Out</button>
+        </form>
+      </th:block>
+
+      <th:block sec:authorize="isAnonymous()">
+        <a th:href="@{/login}" class="button btn-sm">Sign In</a>
+      </th:block>
+    </nav>
+  </header>
+
+  <!-- Shared Footer -->
+  <footer th:fragment="footer">
+    <p>SmartServe University Staff Scheduling &amp; Resource Allocation System &bull; Standalone Module</p>
+  </footer>
+
+</body>
+</html>
