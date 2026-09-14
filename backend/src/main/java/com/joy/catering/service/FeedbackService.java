@@ -32,8 +32,8 @@ public class FeedbackService {
     public Feedback submitFeedback(Long bookingId, Long customerId, FeedbackInput input) {
         Booking booking = bookingService.own(bookingId, customerId);
 
-        if (booking.getStatus() != BookingStatus.APPROVED) {
-            throw new ApiException(HttpStatus.CONFLICT, "Feedback can only be submitted for APPROVED bookings");
+        if (booking.getStatus() != BookingStatus.COMPLETED) {
+            throw new ApiException(HttpStatus.CONFLICT, "Feedback can only be submitted for COMPLETED bookings");
         }
         
         LocalDate today = LocalDate.now(ZoneId.of("Asia/Colombo"));
