@@ -290,10 +290,32 @@ export function StaffFeedbackReport() {
                   {Object.keys(result.data?.category_breakdown || {}).length === 0 && <tr><td>No categorised feedback yet.</td></tr>}
                 </tbody>
               </table>
+              </div>
+              <div className="panel" style={{gridColumn: '1 / -1'}}>
+                <h3>Historical Feedback Trends</h3>
+                <div style={{display: 'flex', alignItems: 'flex-end', gap: '1rem', height: '200px', marginTop: '2rem'}}>
+                  {Object.entries(result.data?.monthly_average_rating || {}).map(([month, avg]) => {
+                    const count = result.data?.monthly_feedback_count[month] || 0;
+                    const height = `${(avg / 5) * 100}%`;
+                    return (
+                      <div key={month} style={{flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                        <div style={{width: '100%', display: 'flex', alignItems: 'flex-end', height: '150px', background: 'var(--color-bg-alt)'}}>
+                          <div 
+                            style={{width: '100%', height, background: 'var(--color-primary)', transition: 'height 0.3s'}} 
+                            title={`Month: ${month} | Avg: ${avg.toFixed(1)} | Count: ${count}`}
+                          />
+                        </div>
+                        <small style={{marginTop: '0.5rem', fontSize: '0.75rem'}}>{month}</small>
+                        <strong style={{fontSize: '0.875rem'}}>{avg.toFixed(1)}</strong>
+                        <span style={{fontSize: '0.75rem', color: 'var(--color-text-light)'}}>({count})</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-          </div>
-        )}
-      </LoadState>
+          )}
+        </LoadState>
     </>
   );
 }

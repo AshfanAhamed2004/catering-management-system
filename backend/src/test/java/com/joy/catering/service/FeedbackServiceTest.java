@@ -178,6 +178,50 @@ public class FeedbackServiceTest {
     }
 
     @Test
+    void getFeedbackReport_calculatesHistoricalTrends() {
+        Feedback f1 = new Feedback();
+        f1.setRating(5);
+        f1.setCreatedAt(java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC));
+
+        Feedback f2 = new Feedback();
+        f2.setRating(3);
+        f2.setCreatedAt(java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC).minusMonths(2));
+
+        Feedback f3 = new Feedback();
+        f3.setRating(1);
+        f3.setCreatedAt(java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC).minusMonths(2));
+
+        Feedback fOld = new Feedback();
+        fOld.setRating(5);
+        fOld.setCreatedAt(java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC).minusMonths(10));
+
+        when(feedbackRepo.findAll()).thenReturn(List.of(f1, f2, f3, fOld));
+
+        com.joy.catering.dto.Dtos.FeedbackReportOut report = feedbackService.getFeedbackReport();
+
+        assertNotNull(report.monthlyAverageRating());
+        assertNotNull(report.monthlyFeedbackCount());
+        assertEquals(6, report.monthlyAverageRating().size());
+        assertEquals(6, report.monthlyFeedbackCount().size());
+
+        String currentMonth = java.time.YearMonth.now(java.time.ZoneOffset.UTC).toString();
+        String twoMonthsAgo = java.time.YearMonth.now(java.time.ZoneOffset.UTC).minusMonths(2).toString();
+        String emptyMonth = java.time.YearMonth.now(java.time.ZoneOffset.UTC).minusMonths(1).toString();
+        String oldMonth = java.time.YearMonth.now(java.time.ZoneOffset.UTC).minusMonths(10).toString();
+
+        assertEquals(5.0, report.monthlyAverageRating().get(currentMonth));
+        assertEquals(1L, report.monthlyFeedbackCount().get(currentMonth));
+
+        assertEquals(2.0, report.monthlyAverageRating().get(twoMonthsAgo));
+        assertEquals(2L, report.monthlyFeedbackCount().get(twoMonthsAgo));
+
+        assertEquals(0.0, report.monthlyAverageRating().get(emptyMonth));
+        assertEquals(0L, report.monthlyFeedbackCount().get(emptyMonth));
+
+        assertNull(report.monthlyAverageRating().get(oldMonth));
+    }
+
+    @Test
     void exportFeedbackCsv_generatesCorrectly() {
         Feedback f = new Feedback();
         f.setId(1L);

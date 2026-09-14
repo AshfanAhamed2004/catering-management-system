@@ -25,6 +25,6 @@ public final class Dtos {
  public record StaffFeedbackUpdate(FeedbackStatus status, List<FeedbackCategory> categories, @Size(max=2000) String staffResponse){}
  public record FeedbackOut(Long id, Long bookingId, String bookingReference, int rating, String comment, List<FeedbackCategory> categories, String staffResponse, FeedbackStatus status, OffsetDateTime createdAt, OffsetDateTime updatedAt){}
  public record StaffFeedbackOut(Long id, Long bookingId, String bookingReference, int rating, String comment, List<FeedbackCategory> categories, String staffResponse, FeedbackStatus status, OffsetDateTime createdAt, OffsetDateTime updatedAt, Long customerId, String customerName, String customerEmail, String customerMobile){}
- public record FeedbackReportOut(long totalFeedback, double averageRating, long lowRatingCount, Map<Integer, Long> ratingDistribution, Map<FeedbackCategory, Long> categoryBreakdown, long submittedFeedbackCount, long unresolvedFeedbackCount){}
+ public record FeedbackReportOut(long totalFeedback, double averageRating, long lowRatingCount, Map<Integer, Long> ratingDistribution, Map<FeedbackCategory, Long> categoryBreakdown, long submittedFeedbackCount, long unresolvedFeedbackCount, Map<String, Double> monthlyAverageRating, Map<String, Long> monthlyFeedbackCount){}
  private Dtos(){}
 }

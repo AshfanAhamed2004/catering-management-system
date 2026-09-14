@@ -34,6 +34,8 @@ export interface FeedbackReportOut {
   category_breakdown: Record<string, number>;
   submitted_feedback_count: number;
   unresolved_feedback_count: number;
+  monthly_average_rating: Record<string, number>;
+  monthly_feedback_count: Record<string, number>;
 }
 
 // Core domain types

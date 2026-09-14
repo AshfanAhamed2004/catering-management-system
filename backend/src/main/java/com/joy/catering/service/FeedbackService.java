@@ -122,7 +122,36 @@ public class FeedbackService {
         long submittedCount = all.stream().filter(f -> f.getStatus() == FeedbackStatus.SUBMITTED).count();
         long underReviewCount = all.stream().filter(f -> f.getStatus() == FeedbackStatus.UNDER_REVIEW).count();
 
-        return new FeedbackReportOut(total, avg, low, dist, catDist, submittedCount, submittedCount + underReviewCount);
+        java.util.Map<String, Double> monthlyAvg = new java.util.LinkedHashMap<>();
+        java.util.Map<String, Long> monthlyCount = new java.util.LinkedHashMap<>();
+        java.util.Map<String, Long> monthlySum = new java.util.HashMap<>();
+        
+        java.time.YearMonth currentMonth = java.time.YearMonth.now(java.time.ZoneOffset.UTC);
+        for (int i = 5; i >= 0; i--) {
+            String ym = currentMonth.minusMonths(i).toString();
+            monthlyAvg.put(ym, 0.0);
+            monthlyCount.put(ym, 0L);
+            monthlySum.put(ym, 0L);
+        }
+
+        for (Feedback f : all) {
+            if (f.getCreatedAt() != null) {
+                String ym = java.time.YearMonth.from(f.getCreatedAt().withOffsetSameInstant(java.time.ZoneOffset.UTC)).toString();
+                if (monthlyCount.containsKey(ym)) {
+                    monthlyCount.put(ym, monthlyCount.get(ym) + 1);
+                    monthlySum.put(ym, monthlySum.get(ym) + f.getRating());
+                }
+            }
+        }
+
+        for (String ym : monthlyCount.keySet()) {
+            long count = monthlyCount.get(ym);
+            if (count > 0) {
+                monthlyAvg.put(ym, (double) monthlySum.get(ym) / count);
+            }
+        }
+
+        return new FeedbackReportOut(total, avg, low, dist, catDist, submittedCount, submittedCount + underReviewCount, monthlyAvg, monthlyCount);
     }
 
     private String escapeCsv(String value) {
