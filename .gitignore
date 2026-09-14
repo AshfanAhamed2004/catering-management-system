@@ -1,0 +1,23 @@
+# Compiled class files & Maven build output
+target/
+bin/
+*.class
+
+# Log files
+*.log
+
+# Database files
+*.db
+catering_crm.db
+
+# IDE configuration files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS generated files
+.DS_Store
+Thumbs.db
