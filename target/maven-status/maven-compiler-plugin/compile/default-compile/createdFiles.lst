@@ -1,0 +1,11 @@
+com\catering\crm\service\InquiryService.class
+com\catering\crm\dao\InquiryDAOImpl.class
+com\catering\crm\model\Inquiry.class
+com\catering\crm\dao\DBConnection.class
+com\catering\crm\dao\InquiryDAO.class
+com\catering\crm\model\InquiryStatus.class
+com\catering\crm\controller\InquiryHttpHandler.class
+com\catering\crm\controller\JsonUtil.class
+com\catering\crm\service\ValidationException.class
+com\catering\crm\Main.class
+com\catering\crm\model\Customer.class

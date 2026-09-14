@@ -1,0 +1,76 @@
+/* Custom styling for Culinary Connect CRM Dashboard */
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+}
+
+.navbar {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+}
+
+.stat-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+.table th {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background-color: #f1f5f9;
+}
+
+.table td {
+    vertical-align: middle;
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+.badge-channel {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+.channel-whatsapp { background-color: #dcfce7; color: #15803d; }
+.channel-phone { background-color: #e0f2fe; color: #0369a1; }
+.channel-email { background-color: #fef3c7; color: #b45309; }
+.channel-walkin { background-color: #f3e8ff; color: #7e22ce; }
+.channel-website { background-color: #ffedd5; color: #c2410c; }
+
+.status-badge {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.status-NEW { background-color: #e0f2fe; color: #0284c7; }
+.status-CONTACTED { background-color: #fef9c3; color: #a16207; }
+.status-QUOTATION_SENT { background-color: #e2e8f0; color: #475569; }
+.status-CONFIRMED { background-color: #dcfce7; color: #15803d; }
+.status-CANCELLED { background-color: #fee2e2; color: #b91c1c; }
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    padding: 0;
+}
+
+.modal-content {
+    border-radius: 14px;
+}

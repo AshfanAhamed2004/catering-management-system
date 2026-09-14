@@ -1,0 +1,11 @@
+C:\Users\User\Desktop\Project SE\crm-system\src\main\java\com\catering\crm\controller\InquiryHttpHandler.java
+C:\Users\User\Desktop\Project SE\crm-system\src\main\java\com\catering\crm\controller\JsonUtil.java
+C:\Users\User\Desktop\Project SE\crm-system\src\main\java\com\catering\crm\dao\DBConnection.java
+C:\Users\User\Desktop\Project SE\crm-system\src\main\java\com\catering\crm\dao\InquiryDAO.java
+C:\Users\User\Desktop\Project SE\crm-system\src\main\java\com\catering\crm\dao\InquiryDAOImpl.java
+C:\Users\User\Desktop\Project SE\crm-system\src\main\java\com\catering\crm\Main.java
+C:\Users\User\Desktop\Project SE\crm-system\src\main\java\com\catering\crm\model\Customer.java
+C:\Users\User\Desktop\Project SE\crm-system\src\main\java\com\catering\crm\model\Inquiry.java
+C:\Users\User\Desktop\Project SE\crm-system\src\main\java\com\catering\crm\model\InquiryStatus.java
+C:\Users\User\Desktop\Project SE\crm-system\src\main\java\com\catering\crm\service\InquiryService.java
+C:\Users\User\Desktop\Project SE\crm-system\src\main\java\com\catering\crm\service\ValidationException.java
