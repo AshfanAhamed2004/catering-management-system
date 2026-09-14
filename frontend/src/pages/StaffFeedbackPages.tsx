@@ -24,6 +24,28 @@ export function StaffFeedbackQueue() {
 
   const result = useData<StaffFeedbackOut[]>(`/staff/feedback?${qs.toString()}`);
 
+  const [exporting, setExporting] = React.useState(false);
+  const [exportError, setExportError] = React.useState('');
+
+  async function downloadCsv() {
+    try {
+      setExporting(true);
+      setExportError('');
+      const res = await api.get(`/staff/feedback/export?${qs.toString()}`, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'feedback_report.csv');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      setExportError(errorMessage(err));
+    } finally {
+      setExporting(false);
+    }
+  }
+
   function updateFilter(key: string, value: string) {
     const next = new URLSearchParams(params);
     if (value) next.set(key, value); else next.delete(key);
@@ -70,6 +92,12 @@ export function StaffFeedbackQueue() {
           <Field label="Search">
             <input type="text" placeholder="Booking Ref or Name" value={search} onChange={e => updateFilter('search', e.target.value)} />
           </Field>
+        </div>
+        <div style={{marginTop: '1rem', display: 'flex', gap: '1rem', alignItems: 'center'}}>
+          <button type="button" className="secondary" onClick={downloadCsv} disabled={exporting}>
+            {exporting ? 'Exporting...' : 'Export CSV'}
+          </button>
+          <ErrorNote message={exportError} />
         </div>
       </div>
 

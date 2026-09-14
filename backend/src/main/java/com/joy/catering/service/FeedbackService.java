@@ -124,4 +124,51 @@ public class FeedbackService {
 
         return new FeedbackReportOut(total, avg, low, dist, catDist, submittedCount, submittedCount + underReviewCount);
     }
+
+    private String escapeCsv(String value) {
+        if (value == null) return "";
+        String sanitized = value.trim();
+        if (sanitized.startsWith("=") || sanitized.startsWith("+") || sanitized.startsWith("-") || sanitized.startsWith("@")) {
+            sanitized = "'" + sanitized;
+        }
+        if (sanitized.contains("\"") || sanitized.contains(",") || sanitized.contains("\n") || sanitized.contains("\r")) {
+            sanitized = "\"" + sanitized.replace("\"", "\"\"") + "\"";
+        }
+        return sanitized;
+    }
+
+    public String exportFeedbackCsv(org.springframework.data.jpa.domain.Specification<Feedback> spec, org.springframework.data.domain.Sort sort) {
+        java.util.List<Feedback> feedbacks = feedbackRepo.findAll(spec, sort);
+        StringBuilder sb = new StringBuilder();
+        
+        // Header
+        sb.append("Booking Reference,Submitted Date,Customer Name,Customer Email,Rating,Categories,Status,Customer Comment,Staff Response\n");
+        
+        // Data
+        for (Feedback f : feedbacks) {
+            String ref = f.getBooking() != null ? f.getBooking().getReference() : "";
+            String date = f.getCreatedAt() != null ? f.getCreatedAt().toString() : "";
+            String name = "";
+            String email = "";
+            if (f.getCustomer() != null) {
+                email = f.getCustomer().getEmail();
+                if (f.getCustomer().getProfile() != null) {
+                    name = f.getCustomer().getProfile().getFullName();
+                }
+            }
+            String cats = f.getCategories() != null ? f.getCategories().stream().map(Enum::name).collect(java.util.stream.Collectors.joining("; ")) : "";
+            
+            sb.append(escapeCsv(ref)).append(",");
+            sb.append(escapeCsv(date)).append(",");
+            sb.append(escapeCsv(name)).append(",");
+            sb.append(escapeCsv(email)).append(",");
+            sb.append(f.getRating()).append(",");
+            sb.append(escapeCsv(cats)).append(",");
+            sb.append(escapeCsv(f.getStatus() != null ? f.getStatus().name() : "")).append(",");
+            sb.append(escapeCsv(f.getComment())).append(",");
+            sb.append(escapeCsv(f.getStaffResponse())).append("\n");
+        }
+        
+        return sb.toString();
+    }
 }

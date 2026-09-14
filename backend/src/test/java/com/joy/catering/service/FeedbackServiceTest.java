@@ -176,4 +176,41 @@ public class FeedbackServiceTest {
         assertEquals(2, report.ratingDistribution().get(2));
         assertEquals(1, report.ratingDistribution().get(5));
     }
+
+    @Test
+    void exportFeedbackCsv_generatesCorrectly() {
+        Feedback f = new Feedback();
+        f.setId(1L);
+        Booking b = new Booking();
+        b.setReference("B-123");
+        f.setBooking(b);
+        User u = new User();
+        u.setEmail("test@test.com");
+        CustomerProfile p = new CustomerProfile();
+        p.setFullName("John Doe");
+        u.setProfile(p);
+        f.setCustomer(u);
+        f.setRating(5);
+        f.setCategories(List.of(FeedbackCategory.FOOD_QUALITY));
+        f.setStatus(FeedbackStatus.SUBMITTED);
+        f.setComment("Great, really \"good\"\nNewline");
+        f.setStaffResponse("=SUM(A1)");
+
+        when(feedbackRepo.findAll(any(org.springframework.data.jpa.domain.Specification.class), any(org.springframework.data.domain.Sort.class))).thenReturn(List.of(f));
+
+        org.springframework.data.jpa.domain.Specification<Feedback> dummySpec = (root, query, cb) -> cb.conjunction();
+        org.springframework.data.domain.Sort dummySort = org.springframework.data.domain.Sort.unsorted();
+        
+        String csv = feedbackService.exportFeedbackCsv(dummySpec, dummySort);
+        assertNotNull(csv);
+        assertTrue(csv.startsWith("Booking Reference,Submitted Date,Customer Name,Customer Email,Rating,Categories,Status,Customer Comment,Staff Response\n"));
+        assertTrue(csv.contains("B-123"));
+        assertTrue(csv.contains("John Doe"));
+        assertTrue(csv.contains("test@test.com"));
+        assertTrue(csv.contains("5"));
+        assertTrue(csv.contains("FOOD_QUALITY"));
+        assertTrue(csv.contains("SUBMITTED"));
+        assertTrue(csv.contains("\"Great, really \"\"good\"\"\nNewline\"")); // CSV escaped
+        assertTrue(csv.contains("'=SUM(A1)")); // Sanitized injection
+    }
 }

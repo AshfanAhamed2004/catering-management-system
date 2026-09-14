@@ -70,17 +70,8 @@ public class FeedbackController {
 
     // --- Staff Endpoints ---
 
-    @GetMapping("/staff/feedback")
-    @PreAuthorize("hasAnyRole('CUSTOMER_RELATIONS_OFFICER','ADMIN')")
-    public List<StaffFeedbackOut> searchFeedback(
-            @RequestParam(required = false) FeedbackStatus status,
-            @RequestParam(required = false) Integer rating,
-            @RequestParam(required = false) FeedbackCategory category,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
-            @RequestParam(required = false) String search) {
-
-        Specification<Feedback> spec = (root, query, cb) -> {
+    private Specification<Feedback> buildSpecification(FeedbackStatus status, Integer rating, FeedbackCategory category, LocalDate fromDate, LocalDate toDate, String search) {
+        return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (status != null) predicates.add(cb.equal(root.get("status"), status));
             if (rating != null) predicates.add(cb.equal(root.get("rating"), rating));
@@ -104,9 +95,40 @@ public class FeedbackController {
             }
             return cb.and(predicates.toArray(new Predicate[0]));
         };
+    }
 
+    @GetMapping("/staff/feedback")
+    @PreAuthorize("hasAnyRole('CUSTOMER_RELATIONS_OFFICER','ADMIN')")
+    public List<StaffFeedbackOut> searchFeedback(
+            @RequestParam(required = false) FeedbackStatus status,
+            @RequestParam(required = false) Integer rating,
+            @RequestParam(required = false) FeedbackCategory category,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+            @RequestParam(required = false) String search) {
+
+        Specification<Feedback> spec = buildSpecification(status, rating, category, fromDate, toDate, search);
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt", "id");
         return feedbackRepo.findAll(spec, sort).stream().map(Mapping::staffFeedback).toList();
+    }
+
+    @GetMapping(value = "/staff/feedback/export", produces = "text/csv")
+    @PreAuthorize("hasAnyRole('CUSTOMER_RELATIONS_OFFICER','ADMIN')")
+    public ResponseEntity<String> exportFeedback(
+            @RequestParam(required = false) FeedbackStatus status,
+            @RequestParam(required = false) Integer rating,
+            @RequestParam(required = false) FeedbackCategory category,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+            @RequestParam(required = false) String search) {
+
+        Specification<Feedback> spec = buildSpecification(status, rating, category, fromDate, toDate, search);
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt", "id");
+        String csv = feedbackService.exportFeedbackCsv(spec, sort);
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=\"feedback_report.csv\"")
+                .body(csv);
     }
 
     @GetMapping("/staff/feedback/{id}")
