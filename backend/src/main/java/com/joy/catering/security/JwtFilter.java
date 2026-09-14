@@ -5,7 +5,17 @@ public class JwtFilter extends OncePerRequestFilter {
  public JwtFilter(JwtService j,UserRepository u){jwt=j;users=u;}
  protected void doFilterInternal(HttpServletRequest r,HttpServletResponse res,FilterChain chain)throws ServletException,IOException{
   String h=r.getHeader("Authorization");
-  if(h!=null&&h.startsWith("Bearer ")){try{var c=jwt.parse(h.substring(7)).getPayload();var u=users.findById(Long.valueOf(c.getSubject())).orElse(null);if(u!=null&&u.isActive()&&u.getTokenVersion()==((Number)c.get("ver")).intValue())SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(u,null,List.of(new SimpleGrantedAuthority("ROLE_"+u.getRole().name()))));}catch(Exception ignored){}}
+  if(h!=null&&h.startsWith("Bearer ")){
+    try{
+      var c=jwt.parse(h.substring(7).trim()).getPayload();
+      var u=users.findById(Long.valueOf(c.getSubject())).orElse(null);
+      if(u!=null&&u.isActive()&&u.getTokenVersion()==((Number)c.get("ver")).intValue()){
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(u,null,List.of(new SimpleGrantedAuthority("ROLE_"+u.getRole().name()))));
+      }
+    }catch(Exception e){
+      e.printStackTrace();
+    }
+  }
   chain.doFilter(r,res);
  }
 }
