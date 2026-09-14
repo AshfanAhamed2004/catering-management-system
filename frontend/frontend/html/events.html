@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Staff Scheduling Dashboard')}">
+  <title>Staff Scheduling Dashboard</title>
+</head>
+<body>
+  <div th:replace="~{fragments/layout :: header('scheduling')}"></div>
+
+  <main>
+    <!-- Page Alert Banner -->
+    <div id="page-alert" class="alert-container hidden"></div>
+
+    <!-- Page Header & Actions -->
+    <div class="flex-between mb-4" style="flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div class="eyebrow">OPERATIONS &amp; ROSTER MANAGEMENT</div>
+        <h1 style="margin: 4px 0 8px;">Staff Scheduling Dashboard</h1>
+        <p class="muted" style="margin: 0;">Plan, assign, and manage staff shifts across university events and catering functions.</p>
+      </div>
+      <div>
+        <button type="button" id="btn-open-create" class="button">
+          + Create New Schedule
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary KPI Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-total-shifts">0</div>
+        <div class="stat-label">Total Shifts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-upcoming-shifts">0</div>
+        <div class="stat-label">Upcoming Shifts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-assigned-staff">0</div>
+        <div class="stat-label">Staff Assigned</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-active-events">0</div>
+        <div class="stat-label">Active Events</div>
+      </div>
+    </div>
+
+    <!-- Filter Toolbar -->
+    <div class="toolbar">
+      <div class="filter-fields">
+        <div class="filter-group">
+          <label for="filter-month">Month</label>
+          <input type="month" id="filter-month" placeholder="YYYY-MM">
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-date">Work Date</label>
+          <input type="date" id="filter-date">
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-event">Event</label>
+          <select id="filter-event">
+            <option value="">All Events</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-staff">Staff Member</label>
+          <select id="filter-staff">
+            <option value="">All Staff</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-role">Role Category</label>
+          <select id="filter-role">
+            <option value="">All Roles</option>
+            <option value="CHEF">Chef</option>
+            <option value="KITCHEN_ASSISTANT">Kitchen Assistant</option>
+            <option value="SUPERVISOR">Supervisor</option>
+            <option value="SERVER">Server</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="toolbar-actions">
+        <button type="button" id="btn-reset-filters" class="button secondary btn-sm">Reset</button>
+        <button type="button" id="btn-refresh" class="button secondary btn-sm">&#x21bb; Refresh</button>
+      </div>
+    </div>
+
+    <!-- Schedule Roster Table -->
+    <div id="roster-table-container" class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Staff Member</th>
+            <th>Role &amp; Area</th>
+            <th>Work Date</th>
+            <th>Shift Time</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="roster-tbody">
+          <!-- Populated by scheduling.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div id="roster-empty" class="card empty-state hidden">
+      <div class="empty-icon">&#x1F4C5;</div>
+      <div class="empty-title">No Schedules Found</div>
+      <div class="empty-desc">There are no shift assignments matching your selected filters. Try broadening your filter criteria or click "Create New Schedule" to assign staff.</div>
+    </div>
+
+  </main>
+
+  <!-- Modal: Create Schedule -->
+  <div id="modal-create" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-create-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-create-title">Create Shift Schedule</h3>
+        <button type="button" class="modal-close alert-close" data-close-modal="modal-create">&times;</button>
+      </div>
+
+      <form id="form-create">
+        <div class="modal-body">
+          <div id="create-alert" class="alert-container modal-alert hidden"></div>
+
+          <label>
+            Event *
+            <select id="create-event" required>
+              <option value="">Loading events...</option>
+            </select>
+          </label>
+
+          <label>
+            Staff Member *
+            <select id="create-staff" required>
+              <option value="">Loading staff members...</option>
+            </select>
+          </label>
+
+          <div class="form-grid-2">
+            <label>
+              Role Category *
+              <select id="create-role" required>
+                <option value="CHEF">Chef</option>
+                <option value="KITCHEN_ASSISTANT">Kitchen Assistant</option>
+                <option value="SUPERVISOR">Supervisor</option>
+                <option value="SERVER">Server</option>
+              </select>
+            </label>
+
+            <label>
+              Area *
+              <select id="create-area">
+                <option value="EVENT">Event Area</option>
+                <option value="KITCHEN">Kitchen</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="form-grid-2">
+            <label>
+              Work Date *
+              <input type="date" id="create-date" required>
+            </label>
+
+            <div><!-- spacer --></div>
+          </div>
+
+          <div class="form-grid-2">
+            <label>
+              Start Time *
+              <input type="time" id="create-start-time" required>
+            </label>
+
+            <label>
+              End Time *
+              <input type="time" id="create-end-time" required>
+            </label>
+          </div>
+
+          <label>
+            Notes / Instructions
+            <textarea id="create-notes" rows="2" placeholder="Special requirements, station info, uniform notes..."></textarea>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="button secondary" data-close-modal="modal-create">Cancel</button>
+          <button type="submit" class="button">Create Shift</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Edit Schedule -->
+  <div id="modal-edit" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-edit-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-edit-title">Edit Shift Schedule</h3>
+        <button type="button" class="modal-close alert-close" data-close-modal="modal-edit">&times;</button>
+      </div>
+
+      <form id="form-edit">
+        <input type="hidden" id="edit-id">
+
+        <div class="modal-body">
+          <div id="edit-alert" class="alert-container modal-alert hidden"></div>
+
+          <div class="card" style="padding: 14px; margin-bottom: 16px; background: #fdfdfc;">
+            <div><strong>Event:</strong> <span id="edit-event-info">—</span></div>
+            <div><strong>Staff Member:</strong> <span id="edit-staff-info">—</span></div>
+          </div>
+
+          <div class="form-grid-2">
+            <label>
+              Role Category *
+              <select id="edit-role" required>
+                <option value="CHEF">Chef</option>
+                <option value="KITCHEN_ASSISTANT">Kitchen Assistant</option>
+                <option value="SUPERVISOR">Supervisor</option>
+                <option value="SERVER">Server</option>
+              </select>
+            </label>
+
+            <label>
+              Area *
+              <select id="edit-area">
+                <option value="EVENT">Event Area</option>
+                <option value="KITCHEN">Kitchen</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="form-grid-2">
+            <label>
+              Work Date *
+              <input type="date" id="edit-date" required>
+            </label>
+
+            <div><!-- spacer --></div>
+          </div>
+
+          <div class="form-grid-2">
+            <label>
+              Start Time *
+              <input type="time" id="edit-start-time" required>
+            </label>
+
+            <label>
+              End Time *
+              <input type="time" id="edit-end-time" required>
+            </label>
+          </div>
+
+          <label>
+            Notes / Instructions
+            <textarea id="edit-notes" rows="2"></textarea>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="button secondary" data-close-modal="modal-edit">Cancel</button>
+          <button type="submit" class="button">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Delete Schedule Confirmation -->
+  <div id="modal-delete" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-delete-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-delete-title">Confirm Cancellation</h3>
+        <button type="button" class="modal-close alert-close" data-close-modal="modal-delete">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="delete-alert" class="alert-container modal-alert hidden"></div>
+        <div id="delete-summary">
+          <p>Are you sure you want to cancel this shift assignment?</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="button secondary" data-close-modal="modal-delete">Keep Shift</button>
+        <button type="button" id="btn-confirm-delete" class="button danger">Cancel Shift</button>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="~{fragments/layout :: footer}"></div>
+
+  <script th:src="@{/js/api.js}"></script>
+  <script th:src="@{/js/scheduling.js}"></script>
+</body>
+</html>

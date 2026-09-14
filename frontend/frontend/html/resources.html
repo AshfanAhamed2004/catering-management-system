@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Resource Management & Allocation')}">
+  <title>Resource Management &amp; Allocation</title>
+</head>
+<body>
+  <div th:replace="~{fragments/layout :: header('resources')}"></div>
+
+  <main>
+    <!-- Page Alert Banner -->
+    <div id="page-alert" class="alert-container hidden"></div>
+
+    <!-- Section 1: Resource Inventory -->
+    <div class="flex-between mb-4" style="flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div class="eyebrow">INVENTORY &amp; ASSETS</div>
+        <h1 style="margin: 4px 0 8px;">Resource Management</h1>
+        <p class="muted" style="margin: 0;">Catalog of equipment, vehicles, chafing dishes, and event supplies available for university functions.</p>
+      </div>
+      <div>
+        <button type="button" id="btn-open-create-resource" class="button">
+          + Add New Resource
+        </button>
+      </div>
+    </div>
+
+    <div id="resources-table-container" class="table-wrap mb-4">
+      <table>
+        <thead>
+          <tr>
+            <th>Resource Name</th>
+            <th>Category</th>
+            <th>Available Quantity</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody id="resources-tbody">
+          <!-- Populated by resources.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="resources-empty" class="card empty-state hidden mb-4">
+      <div class="empty-icon">&#x1F4E6;</div>
+      <div class="empty-title">No Resources in Catalog</div>
+      <div class="empty-desc">Click "Add New Resource" to define equipment and materials available for events.</div>
+    </div>
+
+    <!-- Section 2: Event Resource Allocation -->
+    <hr style="border: 0; border-top: 1px solid var(--line); margin: 40px 0 30px;">
+
+    <div class="flex-between mb-4" style="flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div class="eyebrow">FUNCTION ALLOCATIONS</div>
+        <h2 style="margin: 4px 0 8px;">Event Resource Allocation</h2>
+        <p class="muted" style="margin: 0;">Allocate supplies and equipment to specific university events with real-time over-allocation protection.</p>
+      </div>
+      <div>
+        <button type="button" id="btn-open-allocate" class="button">
+          + Allocate Resource to Event
+        </button>
+      </div>
+    </div>
+
+    <!-- Event Selector -->
+    <div class="toolbar">
+      <div class="filter-fields">
+        <div class="filter-group" style="max-width: 480px;">
+          <label for="select-event">Target Event</label>
+          <select id="select-event">
+            <option value="">Choose an event...</option>
+          </select>
+        </div>
+      </div>
+      <div class="toolbar-actions">
+        <span id="event-header-info" class="muted small fw-bold"></span>
+      </div>
+    </div>
+
+    <!-- Allocated Resources Table -->
+    <div id="allocations-table-container" class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Resource Name</th>
+            <th>Quantity Allocated</th>
+            <th>Allocation Notes</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="allocations-tbody">
+          <!-- Populated by resources.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="allocations-empty" class="card empty-state">
+      <div class="empty-icon">&#x1F4CB;</div>
+      <div class="empty-title">Select an Event</div>
+      <div class="empty-desc">Select an event above to inspect and manage its assigned equipment and resources.</div>
+    </div>
+
+  </main>
+
+  <!-- Modal: Create Resource -->
+  <div id="modal-create-resource" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-create-resource-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-create-resource-title">Add New Resource</h3>
+        <button type="button" class="modal-close alert-close" data-close-modal="modal-create-resource">&times;</button>
+      </div>
+
+      <form id="form-create-resource">
+        <div class="modal-body">
+          <div id="create-resource-alert" class="alert-container modal-alert hidden"></div>
+
+          <label>
+            Resource Name *
+            <input type="text" id="resource-name" required placeholder="e.g., Chafing Dishes, Audio System, Transport Van">
+          </label>
+
+          <div class="form-grid-2">
+            <label>
+              Category *
+              <input type="text" id="resource-category" required placeholder="e.g., Catering, Audio/Visual, Logistics">
+            </label>
+
+            <label>
+              Quantity Available *
+              <input type="number" id="resource-quantity" min="0" required placeholder="e.g., 20">
+            </label>
+          </div>
+
+          <label>
+            Notes / Details
+            <textarea id="resource-notes" rows="2" placeholder="Storage location, specs, handling notes..."></textarea>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="button secondary" data-close-modal="modal-create-resource">Cancel</button>
+          <button type="submit" class="button">Create Resource</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Allocate Resource to Event -->
+  <div id="modal-allocate" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-allocate-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-allocate-title">Allocate Resource to Event</h3>
+        <button type="button" class="modal-close alert-close" data-close-modal="modal-allocate">&times;</button>
+      </div>
+
+      <form id="form-allocate">
+        <div class="modal-body">
+          <div id="allocate-alert" class="alert-container modal-alert hidden"></div>
+
+          <label>
+            Resource *
+            <select id="allocate-resource-select" required>
+              <option value="">Loading resources...</option>
+            </select>
+          </label>
+
+          <label>
+            Quantity Allocated *
+            <input type="number" id="allocate-quantity" min="1" required placeholder="1">
+          </label>
+
+          <label>
+            Notes / Station Info
+            <textarea id="allocate-notes" rows="2" placeholder="Station allocation, delivery instructions..."></textarea>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="button secondary" data-close-modal="modal-allocate">Cancel</button>
+          <button type="submit" class="button">Allocate</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Remove Allocation Confirmation -->
+  <div id="modal-remove-allocation" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-remove-allocation-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-remove-allocation-title">Confirm Allocation Removal</h3>
+        <button type="button" class="modal-close alert-close" data-close-modal="modal-remove-allocation">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="remove-allocation-alert" class="alert-container modal-alert hidden"></div>
+        <div id="remove-allocation-summary">
+          <p>Are you sure you want to remove this resource allocation?</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="button secondary" data-close-modal="modal-remove-allocation">Cancel</button>
+        <button type="button" id="btn-confirm-remove-allocation" class="button danger">Remove Allocation</button>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="~{fragments/layout :: footer}"></div>
+
+  <script th:src="@{/js/api.js}"></script>
+  <script th:src="@{/js/resources.js}"></script>
+</body>
+</html>

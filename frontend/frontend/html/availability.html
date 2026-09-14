@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Staff Availability Management')}">
+  <title>Staff Availability Management</title>
+</head>
+<body>
+  <div th:replace="~{fragments/layout :: header('availability')}"></div>
+
+  <main id="availability-app"
+        th:data-user-role="${currentUserRole}"
+        th:data-staff-id="${currentStaffId}">
+
+    <!-- Page Alert Banner -->
+    <div id="page-alert" class="alert-container hidden"></div>
+
+    <!-- Page Header & Action -->
+    <div class="flex-between mb-4" style="flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div class="eyebrow">AVAILABILITY &amp; TIME-OFF MANAGEMENT</div>
+        <h1 style="margin: 4px 0 8px;">Staff Availability</h1>
+        <p class="muted" style="margin: 0;">
+          Manage working periods and unavailability for catering and kitchen staff.
+          <span id="current-staff-name" class="fw-bold"></span>
+        </p>
+      </div>
+      <div>
+        <button type="button" id="btn-open-add" class="button">
+          + Add Availability Period
+        </button>
+      </div>
+    </div>
+
+    <!-- Staff Selector (Visible to Managers) -->
+    <div id="staff-select-group" class="toolbar">
+      <div class="filter-fields">
+        <div class="filter-group" style="max-width: 400px;">
+          <label for="select-staff">Select Staff Member</label>
+          <select id="select-staff">
+            <option value="">Loading staff members...</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Periods Table -->
+    <div id="periods-table-container" class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Availability Status</th>
+            <th>Starts At</th>
+            <th>Ends At</th>
+            <th>Notes</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="periods-tbody">
+          <!-- Populated by availability.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div id="periods-empty" class="card empty-state hidden">
+      <div class="empty-icon">&#x1F552;</div>
+      <div class="empty-title">No Availability Records</div>
+      <div class="empty-desc">There are no declared availability or time-off periods recorded. Click "Add Availability Period" above to register working hours or unavailability.</div>
+    </div>
+
+  </main>
+
+  <!-- Modal: Add Availability Period -->
+  <div id="modal-add" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-add-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-add-title">Add Availability Period</h3>
+        <button type="button" class="modal-close alert-close" data-close-modal="modal-add">&times;</button>
+      </div>
+
+      <form id="form-add">
+        <div class="modal-body">
+          <div id="add-alert" class="alert-container modal-alert hidden"></div>
+
+          <label>
+            Availability Status *
+            <select id="add-available" required>
+              <option value="true">Available for Shifts</option>
+              <option value="false">Unavailable / Time Off / Busy</option>
+            </select>
+          </label>
+
+          <div class="form-grid-2">
+            <label>
+              Starts At (Date &amp; Time) *
+              <input type="datetime-local" id="add-starts-at" required>
+            </label>
+
+            <label>
+              Ends At (Date &amp; Time) *
+              <input type="datetime-local" id="add-ends-at" required>
+            </label>
+          </div>
+
+          <label>
+            Notes / Reason
+            <textarea id="add-notes" rows="2" placeholder="e.g., University exam, personal leave, preferred morning shift..."></textarea>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="button secondary" data-close-modal="modal-add">Cancel</button>
+          <button type="submit" class="button">Save Availability</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Edit Availability Period -->
+  <div id="modal-edit" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-edit-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-edit-title">Edit Availability Period</h3>
+        <button type="button" class="modal-close alert-close" data-close-modal="modal-edit">&times;</button>
+      </div>
+
+      <form id="form-edit">
+        <input type="hidden" id="edit-id">
+
+        <div class="modal-body">
+          <div id="edit-alert" class="alert-container modal-alert hidden"></div>
+
+          <label>
+            Availability Status *
+            <select id="edit-available" required>
+              <option value="true">Available for Shifts</option>
+              <option value="false">Unavailable / Time Off / Busy</option>
+            </select>
+          </label>
+
+          <div class="form-grid-2">
+            <label>
+              Starts At (Date &amp; Time) *
+              <input type="datetime-local" id="edit-starts-at" required>
+            </label>
+
+            <label>
+              Ends At (Date &amp; Time) *
+              <input type="datetime-local" id="edit-ends-at" required>
+            </label>
+          </div>
+
+          <label>
+            Notes / Reason
+            <textarea id="edit-notes" rows="2"></textarea>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="button secondary" data-close-modal="modal-edit">Cancel</button>
+          <button type="submit" class="button">Update Period</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Delete Confirmation -->
+  <div id="modal-delete" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-delete-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-delete-title">Confirm Deletion</h3>
+        <button type="button" class="modal-close alert-close" data-close-modal="modal-delete">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="delete-alert" class="alert-container modal-alert hidden"></div>
+        <div id="delete-summary">
+          <p>Are you sure you want to delete this availability record?</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="button secondary" data-close-modal="modal-delete">Cancel</button>
+        <button type="button" id="btn-confirm-delete" class="button danger">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="~{fragments/layout :: footer}"></div>
+
+  <script th:src="@{/js/api.js}"></script>
+  <script th:src="@{/js/availability.js}"></script>
+</body>
+</html>
