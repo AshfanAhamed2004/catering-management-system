@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "error": "#ba1a1a", "tertiary": "#003272", "on-primary-fixed-variant": "#173bab", "surface-container": "#eaedff", "outline-variant": "#c4c5d5", "secondary": "#0051d5", "on-primary-fixed": "#001453", "on-secondary-fixed": "#00174b", "on-background": "#131b2e", "surface-bright": "#faf8ff", "surface-tint": "#3755c3", "secondary-container": "#316bf3", "inverse-primary": "#b8c4ff", "surface-container-high": "#e2e7ff", "secondary-fixed": "#dbe1ff", "surface-dim": "#d2d9f4", "on-primary": "#ffffff", "outline": "#757684", "on-error-container": "#93000a", "on-tertiary-fixed-variant": "#004395", "surface-container-highest": "#dae2fd", "surface-container-lowest": "#ffffff", "tertiary-fixed-dim": "#adc6ff", "on-primary-container": "#a8b8ff", "on-surface": "#131b2e", "tertiary-fixed": "#d8e2ff", "surface-container-low": "#f2f3ff", "primary-container": "#1e40af", "surface": "#faf8ff", "primary-fixed": "#dde1ff", "on-tertiary-container": "#9cbbff", "on-error": "#ffffff", "inverse-on-surface": "#eef0ff", "on-tertiary": "#ffffff", "secondary-fixed-dim": "#b4c5ff", "on-secondary-container": "#fefcff", "tertiary-container": "#00489e", "primary-fixed-dim": "#b8c4ff", "on-surface-variant": "#444653", "inverse-surface": "#283044", "primary": "#00288e", "on-tertiary-fixed": "#001a42", "error-container": "#ffdad6", "on-secondary": "#ffffff", "background": "#faf8ff", "on-secondary-fixed-variant": "#003ea8", "surface-variant": "#dae2fd" }, borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, spacing: { "space-xl": "1.5rem", "space-sm": "0.5rem", "space-3xl": "3rem", "margin": "1rem", "space-2xs": "0.125rem", "space-2xl": "2rem", "margin-desktop": "2rem", "space-xs": "0.25rem", "gutter": "1rem", "space-md": "0.75rem", "gutter-desktop": "1.5rem", "space-lg": "1rem" }, fontFamily: { "numeric-table": ["Inter"], "display-lg": ["Inter"], "body-medium": ["Inter"], "body-compact": ["Inter"], "title-md": ["Inter"], "headline-sm": ["Inter"], "label-uppercase": ["Inter"], "headline-lg": ["Inter"], "body-default": ["Inter"], "label-default": ["Inter"] }, fontSize: { "numeric-table": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-medium": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500" }], "body-compact": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }], "title-md": ["15px", { "lineHeight": "20px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "label-uppercase": ["11px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "600" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "body-default": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "label-default": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }] } } } };</script></head><body class="bg-surface font-body-default text-body-default text-on-surface min-h-screen"><header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-7xl mx-auto px-margin lg:px-margin-desktop flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-md" data-path="home" href="#"><img alt="Brand logo for Smart Serve Catering featuring a cloche serving dish icon on a royal blue rounded badge alongside 'SMART SERVE' and 'CATERING' typography.. Brand logo. - Primary color: #1e40af
+- Font: inter
+- Mode: light
+- Roundness: rounded-sm
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UOAFb7GAkiUmt9tYc_qA1YLoVONK0ZEumbjdJbFRlvABM8Mfnj63WqyQqi52Bj4iEgjpkUT-o1Bx3TRlwMQ8mY2qwgEhg1ZytTJm6HDTxW9-kWIMsyJV28SspXEJpzIP9av3ZYyd-uJ5YCtG7SZNku1kaUR17TRXmyOWgef3B_QOo-uXBpfNRIghLZNJsb6slc_zx9ylThGflOmnpPvO00SRYW_SMZISJ7Vha_poKwc6tbTu4kedKvewk"/><div class="flex flex-col"><span class="font-title-md text-title-md text-primary tracking-tight">SMART SERVE</span><span class="font-label-uppercase text-label-uppercase text-on-surface-variant tracking-widest">FINE CATERING & LOGISTICS</span></div></a><nav class="hidden xl:flex items-center gap-space-xs ml-space-xl" data-active-classes="bg-surface-container text-primary font-body-medium"><a class="px-space-md py-space-sm rounded-lg font-body-medium text-body-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" data-path="curated-menus" href="#">Curated Menus</a><a class="px-space-md py-space-sm rounded-lg font-body-medium text-body-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" data-path="event-experiences" href="#">Event Experiences</a><a class="px-space-md py-space-sm rounded-lg font-body-medium text-body-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" data-path="tasting-suites" href="#">Tasting Suites</a><a class="px-space-md py-space-sm rounded-lg font-body-medium text-body-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" data-path="about-us" href="#">About Us</a><a class="px-space-md py-space-sm rounded-lg font-body-medium text-body-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" data-path="contact-concierge" href="#">Contact Concierge</a></nav></div><div class="flex items-center gap-space-lg"><div class="hidden sm:flex items-center gap-space-sm text-on-surface-variant font-numeric-table text-numeric-table"><span class="material-symbols-outlined text-secondary text-[20px]">support_agent</span><div class="flex flex-col text-left"><span class="font-label-uppercase text-label-uppercase text-outline">HOTLINE 24/7</span><a class="font-title-md text-title-md text-on-surface hover:text-primary transition-colors" href="tel:18005557378">1-800-555-SERV</a></div></div><div class="h-8 w-px bg-outline-variant/40 hidden sm:block"></div><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-full bg-surface-container-low hover:bg-surface-container transition-colors group" data-path="customer-profile" href="#"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="hidden md:inline font-label-default text-label-default text-on-surface group-hover:text-primary transition-colors">Client Suite</span></a></div></div></header><main class="w-full pt-20 bg-surface min-h-[calc(100vh-20rem)]"><div class="flex flex-col w-full">
+<!-- Subtle ambient top gradient -->
+<div class="relative w-full overflow-hidden">
+<div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[1000px] h-96 bg-gradient-to-b from-primary/5 via-secondary/5 to-transparent blur-3xl pointer-events-none -z-10"></div>
+<!-- Main Container -->
+<div class="max-w-7xl mx-auto px-margin lg:px-margin-desktop pt-space-xl pb-space-3xl">
+<!-- Breadcrumb & Header Title Section -->
+<div class="space-y-space-md mb-space-2xl">
+<nav class="flex items-center gap-space-xs text-label-default font-label-default text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Catering Reservations</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-body-medium">Request a Booking</span>
+</nav>
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-lg">
+<div class="max-w-3xl space-y-space-xs">
+<div class="inline-flex items-center gap-space-xs px-space-md py-space-2xs rounded-full bg-surface-container-high text-primary font-label-uppercase text-label-uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+              White-Glove Culinary Architecture
+            </div>
+<h1 class="text-display-lg font-display-lg text-on-surface tracking-tight">Tailor Your Culinary Experience</h1>
+<p class="text-body-default font-body-default text-on-surface-variant max-w-2xl">
+              Design your custom banquet, gala, or executive summit with our master brigade. Receive an instantaneous transparent manifest and a direct Event Director response within 2 hours.
+            </p>
+</div>
+<!-- Direct Phone Fast-Track Pill -->
+<div class="flex items-center gap-space-md bg-surface-container-lowest p-space-sm rounded-xl shadow-sm border border-outline-variant/30">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">concierge</span>
+</div>
+<div>
+<p class="text-label-uppercase font-label-uppercase text-outline">Priority Concierge</p>
+<p class="text-title-md font-title-md text-on-surface">1-800-555-SERV (Ext 4)</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Step Progress Indicator -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg mb-space-2xl shadow-sm">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md relative">
+<!-- Step 1 -->
+<div class="flex items-center gap-space-md p-space-xs">
+<div class="w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center font-title-md text-title-md shadow-md">
+              1
+            </div>
+<div class="flex flex-col">
+<span class="text-label-uppercase font-label-uppercase text-secondary font-semibold">Active Step</span>
+<span class="text-title-md font-title-md text-on-surface">Event & Guest Logistics</span>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex items-center gap-space-md p-space-xs opacity-60">
+<div class="w-9 h-9 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-title-md text-title-md">
+              2
+            </div>
+<div class="flex flex-col">
+<span class="text-label-uppercase font-label-uppercase text-outline">Upcoming</span>
+<span class="text-title-md font-title-md text-on-surface">Menu & Culinary Add-ons</span>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex items-center gap-space-md p-space-xs opacity-60">
+<div class="w-9 h-9 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-title-md text-title-md">
+              3
+            </div>
+<div class="flex flex-col">
+<span class="text-label-uppercase font-label-uppercase text-outline">Final</span>
+<span class="text-title-md font-title-md text-on-surface">Review & Reserve</span>
+</div>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full mt-space-md overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-500" style="width: 33.33%;"></div>
+</div>
+</div>
+<!-- Two-Column Primary Booking Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop items-start">
+<!-- ======================= LEFT COLUMN (THE FORM) ======================= -->
+<div class="lg:col-span-7 xl:col-span-8 space-y-space-xl">
+<!-- Section 1: Event & Logistics -->
+<div class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-lg">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary">calendar_clock</span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface">1. Event Schedule & Venue</h2>
+</div>
+<span class="px-space-sm py-space-2xs rounded-full bg-[#ECFDF5] text-[#065F46] font-label-uppercase text-label-uppercase flex items-center gap-space-2xs">
+<span class="w-2 h-2 rounded-full bg-[#059669]"></span> Prime Weekend Date Available
+              </span>
+</div>
+<!-- Date & Time Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Date Picker Input Card -->
+<div class="p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<label class="block text-label-uppercase font-label-uppercase text-on-surface-variant mb-space-2xs">Event Date</label>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[22px]">event</span>
+<span class="text-title-md font-title-md text-on-surface">Saturday, Nov 16, 2024</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-[20px]">edit_calendar</span>
+</div>
+<div class="mt-space-xs flex items-center gap-space-2xs text-label-default font-label-default text-outline">
+<span class="material-symbols-outlined text-[15px] text-[#059669]">check_circle</span>
+<span>Kitchen brigade allocation confirmed</span>
+</div>
+</div>
+<!-- Time Selector Card -->
+<div class="p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<label class="block text-label-uppercase font-label-uppercase text-on-surface-variant mb-space-2xs">Event Start & Load-in</label>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[22px]">schedule</span>
+<span class="text-title-md font-title-md text-on-surface">18:30 (Dinner Service)</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-[20px]">expand_more</span>
+</div>
+<div class="mt-space-xs flex items-center gap-space-2xs text-label-default font-label-default text-outline">
+<span class="material-symbols-outlined text-[15px]">timer</span>
+<span>Includes 3 hr pre-event load-in access</span>
+</div>
+</div>
+</div>
+<!-- Venue Location Input -->
+<div class="space-y-space-2xs">
+<label class="block text-label-uppercase font-label-uppercase text-on-surface-variant">Venue Address & Logistics Bay</label>
+<div class="flex items-center gap-space-sm p-space-md rounded-lg bg-surface-container-low focus-within:bg-surface-container-lowest focus-within:shadow-md transition-all">
+<span class="material-symbols-outlined text-secondary">location_on</span>
+<input class="w-full bg-transparent text-body-default font-body-default text-on-surface focus:outline-none placeholder-outline" placeholder="Enter venue name, suite, or private estate address..." type="text" value="Metropolitan Pavilion - Grand Hall, Loading Bay 4, 125 W 18th St, New York, NY"/>
+<span class="px-space-sm py-space-2xs bg-surface-container text-on-surface rounded font-label-uppercase text-label-uppercase shrink-0">Freight Elevators</span>
+</div>
+<p class="text-label-default font-label-default text-outline pl-space-xs">Our logistics team handles direct permit coordination with venue superintendents.</p>
+</div>
+</div>
+<!-- Section 2: Guest Count & Event Format -->
+<div class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-lg">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary">groups</span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface">2. Attendance & Service Format</h2>
+</div>
+<span class="text-label-default font-label-default text-outline">Scale: 20 to 1,200</span>
+</div>
+<!-- Guest Stepper & Presets -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-md items-center">
+<div class="md:col-span-6 flex items-center justify-between p-space-xs bg-surface-container-low rounded-lg">
+<button class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors shadow-sm active:scale-95" id="guest-minus" type="button">
+<span class="material-symbols-outlined text-[20px]">remove</span>
+</button>
+<div class="text-center">
+<span class="text-headline-lg font-headline-lg text-primary tracking-tight font-numeric-table" id="guest-display">220</span>
+<span class="block text-label-uppercase font-label-uppercase text-outline">Confirmed Guests</span>
+</div>
+<button class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors shadow-sm active:scale-95" id="guest-plus" type="button">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<!-- Quick Presets -->
+<div class="md:col-span-6 flex flex-wrap items-center gap-space-xs">
+<button class="guest-preset-btn px-space-md py-space-xs rounded-lg font-label-default text-label-default bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" type="button">50 Guests</button>
+<button class="guest-preset-btn px-space-md py-space-xs rounded-lg font-label-default text-label-default bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" type="button">100 Guests</button>
+<button class="guest-preset-btn px-space-md py-space-xs rounded-lg font-label-default text-label-default bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" type="button">150 Guests</button>
+<button class="guest-preset-btn px-space-md py-space-xs rounded-lg font-label-default text-label-default bg-primary text-on-primary font-semibold shadow-sm" type="button">220 Guests</button>
+<button class="guest-preset-btn px-space-md py-space-xs rounded-lg font-label-default text-label-default bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" type="button">350+ Gala</button>
+</div>
+</div>
+<!-- Service Styles Selector -->
+<div class="space-y-space-xs">
+<label class="block text-label-uppercase font-label-uppercase text-on-surface-variant">Hospitality Service Execution</label>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm">
+<!-- Plated 4-Course (Selected) -->
+<div class="service-chip p-space-md rounded-lg bg-surface-container text-primary flex flex-col items-center justify-center text-center cursor-pointer transition-all shadow-sm">
+<span class="material-symbols-outlined mb-space-xs text-[24px]">room_service</span>
+<span class="text-title-md font-title-md leading-tight">Plated 4-Course</span>
+<span class="text-label-default font-label-default text-primary/80 mt-space-2xs">Synchronized sync-cover</span>
+</div>
+<!-- Grand Buffet -->
+<div class="service-chip p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface flex flex-col items-center justify-center text-center cursor-pointer transition-all">
+<span class="material-symbols-outlined mb-space-xs text-[24px] text-outline">dinner_dining</span>
+<span class="text-title-md font-title-md leading-tight">Grand Buffet</span>
+<span class="text-label-default font-label-default text-outline mt-space-2xs">Continuous heated lines</span>
+</div>
+<!-- Cocktail Reception -->
+<div class="service-chip p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface flex flex-col items-center justify-center text-center cursor-pointer transition-all">
+<span class="material-symbols-outlined mb-space-xs text-[24px] text-outline">tapas</span>
+<span class="text-title-md font-title-md leading-tight">Cocktail & Canapé</span>
+<span class="text-label-default font-label-default text-outline mt-space-2xs">Butler tray-passed</span>
+</div>
+<!-- Live Chef Stations -->
+<div class="service-chip p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface flex flex-col items-center justify-center text-center cursor-pointer transition-all">
+<span class="material-symbols-outlined mb-space-xs text-[24px] text-outline">outdoor_grill</span>
+<span class="text-title-md font-title-md leading-tight">Live Culinary Stations</span>
+<span class="text-label-default font-label-default text-outline mt-space-2xs">Action carving & sautés</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 3: Luxury Catering Packages (Cards) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-lg">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary">restaurant_menu</span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface">3. Select Culinary Tier</h2>
+</div>
+<span class="text-label-uppercase font-label-uppercase text-outline">All packages include brigade allocation</span>
+</div>
+<div class="space-y-space-md">
+<!-- Card 1: Gold Imperial (SELECTED) -->
+<div class="package-card relative p-space-xl rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer shadow-sm group">
+<div class="absolute top-0 right-0 transform translate-y-0 px-space-md py-space-2xs bg-primary text-on-primary font-label-uppercase text-label-uppercase rounded-bl-lg rounded-tr-xl">
+                  Most Requested Signature
+                </div>
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 mt-space-2xs">
+<span class="material-symbols-outlined text-[16px]">done</span>
+</div>
+<div class="space-y-space-xs">
+<div class="flex items-center gap-space-sm">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Gold Imperial Wedding & Gala Banquet</h3>
+<span class="px-space-sm py-space-2xs bg-surface-container-highest text-primary font-label-uppercase text-label-uppercase rounded">Michelin-Trained Brigade</span>
+</div>
+<p class="text-body-default font-body-default text-on-surface-variant max-w-xl">
+                        Designed for landmark galas and distinguished weddings. Features synchronised white-glove table service and premium carving suites.
+                      </p>
+<!-- Highlights chips -->
+<div class="pt-space-xs flex flex-wrap gap-space-xs">
+<span class="px-space-sm py-space-2xs bg-surface-container-lowest text-on-surface rounded font-body-compact text-body-compact shadow-2xs">4 Carving Stations</span>
+<span class="px-space-sm py-space-2xs bg-surface-container-lowest text-on-surface rounded font-body-compact text-body-compact shadow-2xs">Plated Truffle Velouté</span>
+<span class="px-space-sm py-space-2xs bg-surface-container-lowest text-on-surface rounded font-body-compact text-body-compact shadow-2xs">Chilean Sea Bass Miso</span>
+<span class="px-space-sm py-space-2xs bg-surface-container-lowest text-on-surface rounded font-body-compact text-body-compact shadow-2xs">Artisan Gelato & Dessert Tower</span>
+</div>
+</div>
+</div>
+<div class="text-right shrink-0 md:pl-space-md">
+<div class="text-display-lg font-display-lg text-primary font-numeric-table">$85<span class="text-title-md font-title-md text-on-surface-variant"> / head</span></div>
+<p class="text-label-default font-label-default text-outline">Includes full china & silver hire</p>
+</div>
+</div>
+</div>
+<!-- Card 2: Executive Corporate Summit Package -->
+<div class="package-card relative p-space-xl rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-all cursor-pointer group">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-6 h-6 rounded-full bg-surface-container text-transparent flex items-center justify-center shrink-0 mt-space-2xs">
+<span class="material-symbols-outlined text-[16px]">done</span>
+</div>
+<div class="space-y-space-xs">
+<div class="flex items-center gap-space-sm">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Executive Corporate Summit Package</h3>
+<span class="px-space-sm py-space-2xs bg-surface-container-high text-on-surface-variant font-label-uppercase text-label-uppercase rounded">High-Throughput Efficient</span>
+</div>
+<p class="text-body-default font-body-default text-on-surface-variant max-w-xl">
+                        Streamlined high-energy sustenance engineered for seamless multi-tier conferences, summits, and symposiums.
+                      </p>
+<div class="pt-space-xs flex flex-wrap gap-space-xs">
+<span class="px-space-sm py-space-2xs bg-surface-container-low text-on-surface rounded font-body-compact text-body-compact">Chafing Hot-Line Entrées</span>
+<span class="px-space-sm py-space-2xs bg-surface-container-low text-on-surface rounded font-body-compact text-body-compact">Seasonal Organic Greens</span>
+<span class="px-space-sm py-space-2xs bg-surface-container-low text-on-surface rounded font-body-compact text-body-compact">Artisanal Flatbreads</span>
+<span class="px-space-sm py-space-2xs bg-surface-container-low text-on-surface rounded font-body-compact text-body-compact">Nitro Cold Brew & Mocktail Bar</span>
+</div>
+</div>
+</div>
+<div class="text-right shrink-0 md:pl-space-md">
+<div class="text-display-lg font-display-lg text-on-surface font-numeric-table">$68<span class="text-title-md font-title-md text-on-surface-variant"> / head</span></div>
+<p class="text-label-default font-label-default text-outline">Rapid 45-min turnover format</p>
+</div>
+</div>
+</div>
+<!-- Card 3: Bespoke Haute Sommelier Tasting -->
+<div class="package-card relative p-space-xl rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-all cursor-pointer group">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-6 h-6 rounded-full bg-surface-container text-transparent flex items-center justify-center shrink-0 mt-space-2xs">
+<span class="material-symbols-outlined text-[16px]">done</span>
+</div>
+<div class="space-y-space-xs">
+<div class="flex items-center gap-space-sm">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Bespoke Haute Sommelier Tasting</h3>
+<span class="px-space-sm py-space-2xs bg-secondary/10 text-secondary font-label-uppercase text-label-uppercase rounded">Grand Cru Reserved</span>
+</div>
+<p class="text-body-default font-body-default text-on-surface-variant max-w-xl">
+                        An intimate culinary theatre featuring individually harmonized rare-vintage wine pairings by our Master Sommelier.
+                      </p>
+<div class="pt-space-xs flex flex-wrap gap-space-xs">
+<span class="px-space-sm py-space-2xs bg-surface-container-low text-on-surface rounded font-body-compact text-body-compact">6-Course Rare Pairing</span>
+<span class="px-space-sm py-space-2xs bg-surface-container-low text-on-surface rounded font-body-compact text-body-compact">Imperial Caviar Canapés</span>
+<span class="px-space-sm py-space-2xs bg-surface-container-low text-on-surface rounded font-body-compact text-body-compact">Tableside Truffle Flambé</span>
+<span class="px-space-sm py-space-2xs bg-surface-container-low text-on-surface rounded font-body-compact text-body-compact">Dedicated On-Site Sommelier</span>
+</div>
+</div>
+</div>
+<div class="text-right shrink-0 md:pl-space-md">
+<div class="text-display-lg font-display-lg text-on-surface font-numeric-table">$125<span class="text-title-md font-title-md text-on-surface-variant"> / head</span></div>
+<p class="text-label-default font-label-default text-outline">Cellar reserve glassware included</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 4: Dietary Needs & Chef Customization -->
+<div class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-lg">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary">nutrition</span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface">4. Dietary Profiles & Custom Requests</h2>
+</div>
+<!-- Allergen Tags Quick Select -->
+<div class="space-y-space-xs">
+<label class="block text-label-uppercase font-label-uppercase text-on-surface-variant">Strict Allergen Protocols</label>
+<div class="flex flex-wrap gap-space-xs">
+<button class="px-space-md py-space-xs rounded-full bg-primary text-on-primary font-label-default text-label-default flex items-center gap-space-2xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-[14px]">check</span> Gluten-Free (6 guests)
+                </button>
+<button class="px-space-md py-space-xs rounded-full bg-primary text-on-primary font-label-default text-label-default flex items-center gap-space-2xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-[14px]">check</span> Vegan Certified (18 guests)
+                </button>
+<button class="px-space-md py-space-xs rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container font-label-default text-label-default flex items-center gap-space-2xs" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span> Halal Attested
+                </button>
+<button class="px-space-md py-space-xs rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container font-label-default text-label-default flex items-center gap-space-2xs" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span> Kosher-Style Kitchen
+                </button>
+<button class="px-space-md py-space-xs rounded-full bg-primary text-on-primary font-label-default text-label-default flex items-center gap-space-2xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-[14px]">check</span> Strict Nut Allergy Zone
+                </button>
+<button class="px-space-md py-space-xs rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container font-label-default text-label-default flex items-center gap-space-2xs" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span> Lactose / Dairy Free
+                </button>
+</div>
+</div>
+<!-- Notes Textarea -->
+<div class="space-y-space-2xs">
+<label class="block text-label-uppercase font-label-uppercase text-on-surface-variant">Culinary Directives for Executive Chef</label>
+<textarea class="w-full p-space-md rounded-lg bg-surface-container-low focus:bg-surface-container-lowest focus:shadow-md text-body-default font-body-default text-on-surface focus:outline-none transition-all placeholder-outline" placeholder="Specify any dish modifications, specific VIP preferences, or staging preferences..." rows="3">Approx. 18 vegan guests, 6 celiac/gluten-free, strict nut allergy table required. Interested in signature mocktail pairing for corporate attendees and late-night artisan pizza ovens after 22:00.</textarea>
+<p class="text-label-default font-label-default text-outline">Our lead food safety officer will review and append HACCP compliance sign-offs directly to the manifest.</p>
+</div>
+</div>
+<!-- Banquet Ambience Inspiration Photo Gallery -->
+<div class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Banquet Presentation Preview</h3>
+<p class="text-body-compact font-body-compact text-on-surface-variant">Reference arrangements curated by our in-house floristry & lighting directors</p>
+</div>
+<span class="material-symbols-outlined text-outline">photo_library</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md pt-space-xs">
+<div class="group relative rounded-lg overflow-hidden h-40 bg-surface-container shadow-sm">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close up of a luxury catered banquet table with fine bone china plates, gold flatware, glowing crystal candlelight, and fresh eucalyptus floral centerpieces in a historic ballroom." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUFysQYPnKruYA637HwN8MxMINCM-NAJ_VKv68gnRvVeETLeDxbSsOIP6j9mDMiH-D6RfVr29ZilOmgteGiGZwey3vmkRTh3Db0nUqFGkTDIdBWfw6jR6P-NMMmw5VWtpF87nJ6fXo1kbI1EQzLtQ3AbzbqAyrc2iNTfqXYqyV6wEdzWds2xZtwWAqH_Hd7CfxDHiYKDlcBlswkg2Jhk9hxTL2-eDNA5KTh7Oj8ADjy5rueanREDDZvQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-space-sm">
+<span class="text-label-default font-label-default text-white font-medium">Imperial Table Setting</span>
+</div>
+</div>
+<div class="group relative rounded-lg overflow-hidden h-40 bg-surface-container shadow-sm">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Artisanal catering chef plating Chilean sea bass with microgreens and saffron emulsion sauce on a warm ambient kitchen line." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL32a_i563eHsCIrH22XsAVA4tjqMQyp9rlPPm0i-5b2SEb2RorKGL_Cfxwj3CyYbhs6zi713R5y80CzG9hU6kBjgTx8QgBj829LeJ0FFtyFHKL7fROne_wAVZ0fRGsePaySGJKvOWJAW7LakMk_dQtf9oXJq05NHEyTwqwE6f82qEfgDBIpFR94Xm6-R-x8DfKokkGnXXhZHrlyb2P9FMVJivpplHYZMzld8jwGPtZbtDIVH3J2RyUQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-space-sm">
+<span class="text-label-default font-label-default text-white font-medium">Brigade Plating Precision</span>
+</div>
+</div>
+<div class="group relative rounded-lg overflow-hidden h-40 bg-surface-container shadow-sm">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Elegant dessert display with miniature French pastries, fruit tarts, macarons, and warm champagne flutes at a nighttime celebration." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtJZJkzpx1WYfJd2V9dW0maOZ22QEF-AJu679lXw488S8cwulmP9Ey8Wk2Uy_kktt1bIgxbPPG9iEQYpTY5AiNyhIp_yq0Bn7fqYHP9PsFhpR2KvT3DycvmuwdHVcfzBOlzUMmA9WxBj3R_jUX7JkrA3-B3pboIogIhJ6F1xPnDDYBu8T_oKzAyklBC6ve-ZthBw4CXLGulH24XF_TJ3syopctMkQwzDaVQmeQVhg2UqNfK12FnJX7Hg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-space-sm">
+<span class="text-label-default font-label-default text-white font-medium">Artisan Dessert Bar</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ======================= RIGHT COLUMN (RECEIPT / ORDER SUMMARY) ======================= -->
+<div class="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24 space-y-space-lg">
+<!-- Elevated Receipt Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-xl overflow-hidden">
+<!-- Header bar with subtle badge -->
+<div class="bg-surface-container-low p-space-lg flex items-center justify-between">
+<div>
+<span class="text-label-uppercase font-label-uppercase text-outline tracking-wider">Manifest Estimate</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Reservation Summary</h3>
+</div>
+<span class="px-space-sm py-space-2xs rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-uppercase text-label-uppercase flex items-center gap-space-2xs">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span> Live Calc
+              </span>
+</div>
+<!-- Receipt Body -->
+<div class="p-space-xl space-y-space-lg">
+<!-- Snapshot details badge -->
+<div class="p-space-md rounded-lg bg-surface-container-low space-y-space-xs font-body-compact text-body-compact">
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-[16px] text-secondary">event</span> Date
+                  </span>
+<span class="text-on-surface font-title-md">Sat, Nov 16, 2024</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-[16px] text-secondary">location_city</span> Venue
+                  </span>
+<span class="text-on-surface font-title-md truncate max-w-[180px]">Metropolitan Pavilion</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-[16px] text-secondary">people</span> Attendance
+                  </span>
+<span class="text-on-surface font-title-md">220 Guests</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-[16px] text-secondary">diamond</span> Tier
+                  </span>
+<span class="text-primary font-title-md">Gold Imperial ($85/hd)</span>
+</div>
+</div>
+<!-- Line Items Breakdown (Monospace numeric table styling) -->
+<div class="space-y-space-sm font-numeric-table text-numeric-table">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>Base Package (220 × $85.00)</span>
+<span class="text-on-surface font-medium">$18,700.00</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="flex items-center gap-space-2xs">
+                    Freight & Cold-Chain Transit
+                    <span class="material-symbols-outlined text-[14px] text-outline cursor-pointer" title="Temperature-controlled fleet dispatch">info</span>
+</span>
+<span class="text-on-surface font-medium">$650.00</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="flex items-center gap-space-2xs">
+                    Lead Captain & Brigade Staffing (12%)
+                    <span class="material-symbols-outlined text-[14px] text-outline cursor-pointer" title="Includes 1 Captain, 6 Sous Chefs, 14 Waitstaff">info</span>
+</span>
+<span class="text-on-surface font-medium">$2,244.00</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<span>State & Municipal F&B Tax (8.875%)</span>
+<span class="text-on-surface font-medium">$1,703.11</span>
+</div>
+<div class="flex items-center justify-between text-[#065F46]">
+<span class="flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-[16px]">loyalty</span> Corporate Gala Courtesy Discount
+                  </span>
+<span class="font-medium">-$1,010.00</span>
+</div>
+</div>
+<!-- Subtle Dashed Divider -->
+<div class="w-full h-px bg-gradient-to-r from-transparent via-outline-variant to-transparent my-space-md"></div>
+<!-- Grand Total -->
+<div class="space-y-space-xs">
+<div class="flex items-baseline justify-between">
+<div>
+<span class="text-label-uppercase font-label-uppercase text-outline block">Estimated Total</span>
+<span class="text-label-default font-label-default text-on-surface-variant">All-Inclusive Transparent Price</span>
+</div>
+<div class="text-right">
+<span class="text-display-lg font-display-lg text-primary tracking-tight font-numeric-table">$22,287.11</span>
+</div>
+</div>
+<p class="text-label-default font-label-default text-outline text-right">~$101.30 per attending guest net</p>
+</div>
+<!-- VIP Perk Box -->
+<div class="p-space-md rounded-lg bg-surface-container flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-space-2xs">stars</span>
+<div class="space-y-space-2xs">
+<p class="text-title-md font-title-md text-primary">VIP Private Tasting Included</p>
+<p class="text-body-compact font-body-compact text-on-surface-variant">
+                    Enjoy a complimentary 4-guest pre-event tasting session in our Executive Test Kitchen before finalizing the menu.
+                  </p>
+</div>
+</div>
+<!-- Primary Action CTA -->
+<div class="space-y-space-sm">
+<button class="w-full py-space-md px-space-lg rounded-lg bg-primary hover:bg-primary-container text-on-primary text-headline-sm font-headline-sm flex items-center justify-center gap-space-sm transition-all shadow-md active:scale-[0.99]" type="button">
+<span>Submit Booking Request</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<div class="space-y-space-2xs pt-space-xs text-center text-label-default font-label-default text-outline">
+<div class="flex items-center justify-center gap-space-xs">
+<span class="material-symbols-outlined text-[15px] text-[#059669]">verified_user</span>
+<span>No upfront billing • 48-Hour Complimentary Date Hold</span>
+</div>
+<p>Dedicated Event Director assigned directly within 2 business hours.</p>
+</div>
+</div>
+</div>
+<!-- Card Scalloped / Receipt Base visual effect -->
+<div class="h-2 bg-gradient-to-r from-primary via-secondary to-primary-container"></div>
+</div>
+<!-- Assigned Event Concierge Liaison Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex items-center gap-space-md">
+<div class="relative">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Professional corporate headshot of senior catering event director Dr. Elena Vance smiling warmly in modern business attire." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUmxhXScCPu64x4CiTdmDePKOSvOyNcT4gbhwg372Gyy9gO-RSLeNqHuDFJjcFkw0VeOfQSZoJYoQfQmOqWoRz8r4mKUEVXbg3B5aXcMCM534g3-h1co9BXt65v2Ls8V4G8NO8pUBPVwY7WvPRPdzpKZsPfEbAgf20EcaWBtDOe5jyYa0cGr3vM3X2d_LbuWXLBW7ZBxcjowjY0SEFnZtMwK0fE5GK78EcVxZRQP5GRx4LB215WxANhg"/>
+</div>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-[#059669] border-2 border-surface-container-lowest"></span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-title-md font-title-md text-on-surface truncate">Elena Vance, CMP</h4>
+<p class="text-body-compact font-body-compact text-on-surface-variant truncate">Executive Event Director</p>
+<div class="flex items-center gap-space-xs text-label-default font-label-default text-primary mt-space-2xs">
+<span class="material-symbols-outlined text-[14px]">call</span>
+<span>Active on Manhattan Line</span>
+</div>
+</div>
+<button class="px-space-md py-space-xs rounded-lg bg-surface-container hover:bg-surface-container-high text-primary font-label-default text-label-default transition-colors shrink-0" type="button">
+              Direct Chat
+            </button>
+</div>
+<!-- Trust & Accreditations Mini Tile -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between text-outline text-label-default font-label-default">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>HACCP Gold Certified Kitchen</span>
+</div>
+<span>•</span>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px]">shield</span>
+<span>$5M Umbrella Insured</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interactions for Guest Stepper & Presets
+  const guestDisplay = document.getElementById('guest-display');
+  const minusBtn = document.getElementById('guest-minus');
+  const plusBtn = document.getElementById('guest-plus');
+  const presetBtns = document.querySelectorAll('.guest-preset-btn');
+  const serviceChips = document.querySelectorAll('.service-chip');
+  const packageCards = document.querySelectorAll('.package-card');
+
+  let currentGuests = 220;
+
+  function updateDisplay(val) {
+    currentGuests = Math.max(10, Math.min(1500, val));
+    if (guestDisplay) {
+      guestDisplay.textContent = currentGuests;
+    }
+  }
+
+  if (minusBtn) {
+    minusBtn.addEventListener('click', () => updateDisplay(currentGuests - 10));
+  }
+  if (plusBtn) {
+    plusBtn.addEventListener('click', () => updateDisplay(currentGuests + 10));
+  }
+
+  presetBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      presetBtns.forEach(b => {
+        b.className = 'guest-preset-btn px-space-md py-space-xs rounded-lg font-label-default text-label-default bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all';
+      });
+      btn.className = 'guest-preset-btn px-space-md py-space-xs rounded-lg font-label-default text-label-default bg-primary text-on-primary font-semibold shadow-sm';
+      const numMatch = btn.textContent.match(/\d+/);
+      if (numMatch) {
+        updateDisplay(parseInt(numMatch[0], 10));
+      }
+    });
+  });
+
+  serviceChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      serviceChips.forEach(c => {
+        c.className = 'service-chip p-space-md rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface flex flex-col items-center justify-center text-center cursor-pointer transition-all';
+        const icon = c.querySelector('.material-symbols-outlined');
+        if (icon) icon.className = 'material-symbols-outlined mb-space-xs text-[24px] text-outline';
+        const sub = c.querySelectorAll('span')[2];
+        if (sub) sub.className = 'text-label-default font-label-default text-outline mt-space-2xs';
+      });
+      chip.className = 'service-chip p-space-md rounded-lg bg-surface-container text-primary flex flex-col items-center justify-center text-center cursor-pointer transition-all shadow-sm';
+      const activeIcon = chip.querySelector('.material-symbols-outlined');
+      if (activeIcon) activeIcon.className = 'material-symbols-outlined mb-space-xs text-[24px] text-primary';
+      const activeSub = chip.querySelectorAll('span')[2];
+      if (activeSub) activeSub.className = 'text-label-default font-label-default text-primary/80 mt-space-2xs';
+    });
+  });
+
+  packageCards.forEach(card => {
+    card.addEventListener('click', () => {
+      packageCards.forEach(c => {
+        c.className = 'package-card relative p-space-xl rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-all cursor-pointer group';
+        const indicator = c.querySelector('.rounded-full');
+        if (indicator) {
+          indicator.className = 'w-6 h-6 rounded-full bg-surface-container text-transparent flex items-center justify-center shrink-0 mt-space-2xs';
+        }
+      });
+      card.className = 'package-card relative p-space-xl rounded-xl bg-surface-container-low hover:bg-surface-container transition-all cursor-pointer shadow-sm group';
+      const activeIndicator = card.querySelector('.rounded-full');
+      if (activeIndicator) {
+        activeIndicator.className = 'w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 mt-space-2xs';
+      }
+    });
+  });
+</script></main><footer class="w-full bg-surface-container-lowest mt-space-3xl shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div class="max-w-7xl mx-auto px-margin lg:px-margin-desktop py-space-3xl"><div class="grid grid-cols-1 md:grid-cols-4 gap-gutter-desktop mb-space-2xl"><div class="space-y-space-md"><div class="flex items-center gap-space-sm"><img alt="Brand logo for Smart Serve Catering" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UOAFb7GAkiUmt9tYc_qA1YLoVONK0ZEumbjdJbFRlvABM8Mfnj63WqyQqi52Bj4iEgjpkUT-o1Bx3TRlwMQ8mY2qwgEhg1ZytTJm6HDTxW9-kWIMsyJV28SspXEJpzIP9av3ZYyd-uJ5YCtG7SZNku1kaUR17TRXmyOWgef3B_QOo-uXBpfNRIghLZNJsb6slc_zx9ylThGflOmnpPvO00SRYW_SMZISJ7Vha_poKwc6tbTu4kedKvewk"/><span class="font-title-md text-title-md text-primary">SMART SERVE</span></div><p class="font-body-compact text-body-compact text-on-surface-variant max-w-xs">Bespoke culinary curation, executive boardroom service, and large-scale ceremonial catering executed with institutional precision.</p><div class="flex items-center gap-space-sm pt-space-xs"><span class="px-space-sm py-space-2xs bg-surface-container-high text-on-surface rounded font-label-uppercase text-label-uppercase">HACCP Certified</span><span class="px-space-sm py-space-2xs bg-surface-container-high text-on-surface rounded font-label-uppercase text-label-uppercase">ServSafe Elite</span></div></div><div class="space-y-space-md"><h4 class="font-title-md text-title-md text-on-surface">Hospitality Experiences</h4><ul class="space-y-space-xs font-body-default text-body-default text-on-surface-variant"><li class="hover:text-on-surface transition-colors cursor-pointer">Executive Boardroom Dining</li><li class="hover:text-on-surface transition-colors cursor-pointer">Corporate Galas & Summits</li><li class="hover:text-on-surface transition-colors cursor-pointer">Private Sommelier Suites</li><li class="hover:text-on-surface transition-colors cursor-pointer">Micro-Batch Artisanal Canapés</li></ul></div><div class="space-y-space-md"><h4 class="font-title-md text-title-md text-on-surface">Concierge & Care</h4><ul class="space-y-space-xs font-body-default text-body-default text-on-surface-variant"><li class="hover:text-on-surface transition-colors cursor-pointer">Dietary Profiles & Allergen Audit</li><li class="hover:text-on-surface transition-colors cursor-pointer">Direct Tasting Requests</li><li class="hover:text-on-surface transition-colors cursor-pointer">Event Production Specs</li><li class="hover:text-on-surface transition-colors cursor-pointer">Client Portal Invoicing</li></ul></div><div class="space-y-space-md"><h4 class="font-title-md text-title-md text-on-surface">Executive Hotline</h4><p class="font-body-compact text-body-compact text-on-surface-variant">Direct liaison for event planners and corporate concierge accounts.</p><div class="font-numeric-table text-numeric-table text-on-surface space-y-space-2xs"><p class="text-headline-sm font-headline-sm text-primary">+1 (800) 555-7378</p><p class="text-on-surface-variant font-label-default text-label-default">dispatch@smartservecatering.com</p></div></div></div><div class="pt-space-xl flex flex-col md:flex-row items-center justify-between gap-space-md text-on-surface-variant font-label-default text-label-default"><p>© 2025 Smart Serve Catering Inc. All rights reserved. Culinary logistics & enterprise event architecture.</p><div class="flex items-center gap-space-lg"><span class="hover:text-on-surface cursor-pointer">Privacy Charter</span><span class="hover:text-on-surface cursor-pointer">Food Safety Protocol</span><span class="hover:text-on-surface cursor-pointer">Contract Terms</span></div></div></div></footer></body></html>

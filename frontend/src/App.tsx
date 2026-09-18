@@ -1,19 +1,42 @@
 import { useEffect } from 'react';
-import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
-import { catalogRoles, Guard, reviewRoles, useAuth } from './auth';
-import { AuthPage, PasswordResetPage } from './pages/AuthPages';
-import { Home, PackageDetail, PackageList } from './pages/CatalogPages';
-import { Dashboard, ProfilePage } from './pages/CustomerPages';
-import { BookingDetails, BookingEditor, BookingList } from './pages/BookingPages';
-import { FeedbackList, FeedbackDetail, FeedbackForm } from './pages/FeedbackPages';
-import { CatalogManagement, UsersPage } from './pages/StaffPages';
-import { StaffFeedbackQueue, StaffFeedbackDetail, StaffFeedbackReport } from './pages/StaffFeedbackPages';
+import { Route, Routes, useLocation } from 'react-router-dom';
+
+import { AuthPage } from './pages/AuthPage';
+import { ClientBookingRequest } from './pages/ClientBookingRequest';
+import { ClientDashboard } from './pages/ClientDashboard';
+import { AdminInventory } from './pages/AdminInventory';
+import { AdminFeedback } from './pages/AdminFeedback';
+import { AdminBilling } from './pages/AdminBilling';
+import { AdminBookings } from './pages/AdminBookings';
+import { AdminStaff } from './pages/AdminStaff';
+import { AdminMenuEngineering } from './pages/AdminMenuEngineering';
+import { AdminPackages } from './pages/AdminPackages';
 
 export default function App() {
-  const {user,logout} = useAuth(); const location = useLocation();
-  useEffect(() => {window.scrollTo(0,0); document.getElementById('main')?.focus();},[location.pathname]);
-  return <><a className="skip" href="#main">Skip to content</a><header><Link className="brand" to="/"><span aria-hidden="true">✳</span><span>the gathering<small>CATERING & CELEBRATIONS</small></span></Link><nav aria-label="Main navigation"><NavLink to="/packages">Our packages</NavLink>{user ? <><NavLink to="/dashboard">My account</NavLink>{user.role === 'CUSTOMER' && <NavLink to="/bookings">My bookings</NavLink>}{catalogRoles.includes(user.role) && <NavLink to="/staff/catalog">Catalog</NavLink>}{reviewRoles.includes(user.role) && <><NavLink to="/staff/bookings">Requests</NavLink><NavLink to="/staff/feedback">Feedback</NavLink></>}<button className="secondary" onClick={logout}>Sign out</button></> : <><NavLink to="/login">Sign in</NavLink><Link className="button" to="/register">Join the table ↗</Link></>}</nav></header><main id="main" tabIndex={-1}><Routes><Route path="/" element={<Home/>}/><Route path="/login" element={<AuthPage key="login"/>}/><Route path="/register" element={<AuthPage key="register" register/>}/><Route path="/forgot-password" element={<PasswordResetPage/>}/><Route path="/packages" element={<PackageList/>}/><Route path="/packages/:id" element={<PackageDetail/>}/><Route path="/dashboard" element={<Guard><Dashboard/></Guard>}/><Route path="/profile" element={<Guard roles={['CUSTOMER']}><ProfilePage/></Guard>}/><Route path="/bookings" element={<Guard roles={['CUSTOMER']}><BookingList/></Guard>}/><Route path="/bookings/new" element={<Guard roles={['CUSTOMER']}><BookingEditor key="new"/></Guard>}/><Route path="/bookings/:id" element={<Guard roles={['CUSTOMER']}><BookingDetails/></Guard>}/><Route path="/bookings/:id/edit" element={<Guard roles={['CUSTOMER']}><BookingEditor key="edit"/></Guard>}/><Route path="/staff/catalog" element={<Guard roles={catalogRoles}><CatalogManagement/></Guard>}/><Route path="/staff/bookings" element={<Guard roles={reviewRoles}><BookingList staff/></Guard>}/><Route path="/staff/bookings/:id" element={<Guard roles={reviewRoles}><BookingDetails staff/></Guard>}/><Route path="/staff/feedback" element={<Guard roles={reviewRoles}><StaffFeedbackQueue/></Guard>}/><Route path="/staff/feedback/report" element={<Guard roles={reviewRoles}><StaffFeedbackReport/></Guard>}/><Route path="/staff/feedback/:id" element={<Guard roles={reviewRoles}><StaffFeedbackDetail/></Guard>}/><Route path="/admin/users" element={<Guard roles={['ADMIN']}><UsersPage/></Guard>}/><Route path="/feedback" element={<Guard roles={['CUSTOMER']}><FeedbackList/></Guard>}/>
-<Route path="/feedback/:id" element={<Guard roles={['CUSTOMER']}><FeedbackDetail/></Guard>}/>
-<Route path="/bookings/:bookingId/feedback" element={<Guard roles={['CUSTOMER']}><FeedbackForm/></Guard>}/>
-<Route path="*" element={<div className="empty"><h1>Page not found</h1><Link to="/">Return home</Link></div>}/> </Routes></main><footer><Link className="brand" to="/">the gathering</Link><p>Rooted in Sri Lankan hospitality.<br/>Made for moments together.</p><span>GOOD FOOD. GOOD COMPANY.</span></footer></>;
+  const location = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  return (
+    <Routes>
+      {/* Client Routes */}
+      <Route path="/" element={<ClientBookingRequest />} />
+      <Route path="/login" element={<AuthPage />} />
+      <Route path="/client/bookings" element={<ClientDashboard />} />
+
+      {/* Admin/Staff Routes */}
+      <Route path="/admin/inventory" element={<AdminInventory />} />
+      <Route path="/admin/feedback" element={<AdminFeedback />} />
+      <Route path="/admin/billing" element={<AdminBilling />} />
+      <Route path="/admin/bookings" element={<AdminBookings />} />
+      <Route path="/admin/staff" element={<AdminStaff />} />
+      <Route path="/admin/menu" element={<AdminMenuEngineering />} />
+      <Route path="/admin/packages" element={<AdminPackages />} />
+      
+      {/* Fallback */}
+      <Route path="*" element={<div>Page not found</div>} />
+    </Routes>
+  );
 }
