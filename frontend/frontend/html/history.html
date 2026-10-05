@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Audit Log & History')}">
+  <title>Audit Log &amp; History</title>
+</head>
+<body>
+  <div th:replace="~{fragments/layout :: header('history')}"></div>
+
+  <main>
+    <div class="flex-between mb-4" style="flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div class="eyebrow">COMPLIANCE &amp; TRACEABILITY</div>
+        <h1 style="margin: 4px 0 8px;">Audit History</h1>
+        <p class="muted" style="margin: 0;">Immutable record of schedule creations, confirmations, publish events, and staff shift changes.</p>
+      </div>
+
+      <div>
+        <a th:href="@{/manager/history.csv}" class="button secondary btn-sm">&#x2B07; Export CSV</a>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Event Reference</th>
+            <th>Action</th>
+            <th>Actor</th>
+            <th>Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="r : ${records}">
+            <td><strong th:text="${#temporals.format(r.occurredAt, 'yyyy-MM-dd HH:mm:ss')}">Time</strong></td>
+            <td>
+              <a th:href="@{'/manager/schedules/' + ${r.schedule.id}}" th:text="${r.schedule.event.reference}">EVT-001</a>
+            </td>
+            <td><span class="badge" th:text="${r.action}">ACTION</span></td>
+            <td><span class="muted small" th:text="${r.actor.email}">user</span></td>
+            <td><span class="small" th:text="${r.detail}">Detail</span></td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(records)}">
+            <td colspan="5" class="muted text-center" style="padding: 32px;">No audit events recorded yet.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

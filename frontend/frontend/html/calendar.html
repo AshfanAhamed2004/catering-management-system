@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Shift Calendar')}">
+  <title>Shift Calendar</title>
+</head>
+<body>
+  <div th:replace="~{fragments/layout :: header('calendar')}"></div>
+
+  <main>
+    <div class="flex-between mb-4" style="flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div class="eyebrow">MONTHLY ROSTER</div>
+        <h1 style="margin: 4px 0 8px;">Shift Calendar</h1>
+        <p class="muted" style="margin: 0;">Overview of scheduled university events and staff deployment by date.</p>
+      </div>
+
+      <div class="actions">
+        <a th:href="@{/manager/calendar(month=${previous})}" class="button secondary btn-sm">&larr; Previous Month</a>
+        <strong style="padding: 0 12px; font-size: 16px;" th:text="${month}">2026-10</strong>
+        <a th:href="@{/manager/calendar(month=${next})}" class="button secondary btn-sm">Next Month &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="calendar">
+      <div th:each="day : ${days}" class="day">
+        <strong th:text="${#temporals.format(day, 'EEE d')}">Mon 1</strong>
+        <div style="margin-top: 6px;">
+          <div th:each="s : ${schedules}" th:if="${s.event.eventDate.equals(day)}" style="margin-bottom: 4px;">
+            <a th:href="@{'/manager/schedules/' + ${s.id}}" style="font-weight: 600; text-decoration: none;">
+              <span class="badge btn-sm" th:text="${s.event.reference}">EVT</span>
+            </a>
+            <div class="small muted" th:text="${s.event.name}">Event</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

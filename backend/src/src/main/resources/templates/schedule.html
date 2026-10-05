@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Schedule Details')}">
+  <title>Schedule Details</title>
+</head>
+<body>
+  <div th:replace="~{fragments/layout :: header('scheduling')}"></div>
+
+  <main>
+    <div th:if="${message}" class="notice" th:text="${message}">Action feedback</div>
+
+    <!-- Schedule Header -->
+    <div class="flex-between mb-4" style="flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div class="eyebrow">SCHEDULE DETAILS</div>
+        <h1 style="margin: 4px 0 8px;">
+          <span th:text="${schedule.event.reference}">EVT-001</span>:
+          <span th:text="${schedule.event.name}">Event Name</span>
+        </h1>
+        <p class="muted" style="margin: 0;">
+          Date: <strong th:text="${schedule.event.eventDate}">2026-10-01</strong> &bull;
+          Location: <span th:text="${schedule.event.location}">Location</span> &bull;
+          Status: <span class="badge" th:text="${schedule.status}">DRAFT</span>
+        </p>
+      </div>
+
+      <div class="actions">
+        <!-- Confirm Schedule -->
+        <form th:if="${schedule.status == 'DRAFT'}" th:action="@{'/manager/schedules/' + ${schedule.id} + '/confirm'}" method="post">
+          <button type="submit" class="button">Confirm Schedule</button>
+        </form>
+
+        <!-- Publish Schedule -->
+        <form th:if="${schedule.status == 'READY'}" th:action="@{'/manager/schedules/' + ${schedule.id} + '/publish'}" method="post">
+          <button type="submit" class="button">Publish Schedule</button>
+        </form>
+
+        <!-- Notice Delivery / Resend -->
+        <form th:if="${schedule.status == 'PUBLISHED'}" th:action="@{'/manager/schedules/' + ${schedule.id} + '/deliver'}" method="post">
+          <button type="submit" class="button secondary">Deliver Notices</button>
+        </form>
+
+        <form th:if="${schedule.status == 'PUBLISHED'}" th:action="@{'/manager/schedules/' + ${schedule.id} + '/resend'}" method="post">
+          <button type="submit" class="button secondary">Resend Eligible</button>
+        </form>
+
+        <!-- Cancel Schedule -->
+        <form th:if="${schedule.status != 'CANCELLED'}" th:action="@{'/manager/schedules/' + ${schedule.id} + '/cancel'}" method="post" class="inline">
+          <input type="hidden" name="notes" value="Cancelled by operations manager.">
+          <button type="submit" class="button danger" onclick="return confirm('Cancel this entire schedule?')">Cancel Schedule</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Requirements & Assignments Section -->
+    <div class="split">
+      <div>
+        <h2>Staffing Requirements &amp; Shift Roster</h2>
+
+        <div th:each="rView : ${requirements}" class="card">
+          <div class="flex-between">
+            <div>
+              <span class="badge" th:text="${rView.requirement.area}">EVENT</span>
+              <span class="badge" th:text="${rView.requirement.category}">SERVER</span>
+              <span class="badge"
+                    th:classappend="${rView.status == 'SUFFICIENT'} ? 'badge-published' : 'badge-cancelled'"
+                    th:text="${rView.status}">SUFFICIENT</span>
+            </div>
+            <div>
+              <strong th:text="${rView.assigned} + ' / ' + ${rView.requirement.requiredCount}">0 / 2</strong> assigned
+              <span th:if="${rView.remaining > 0}" class="error small" th:text="'(' + ${rView.remaining} + ' needed)'">(2 needed)</span>
+            </div>
+          </div>
+
+          <div class="muted small" style="margin: 8px 0;">
+            Window: <span th:text="${#temporals.format(rView.requirement.startsAt, 'MMM dd HH:mm')}">Time</span> &ndash;
+            <span th:text="${#temporals.format(rView.requirement.endsAt, 'MMM dd HH:mm')}">Time</span>
+            <span th:if="${rView.requirement.notes}" th:text="' &bull; ' + ${rView.requirement.notes}"></span>
+          </div>
+
+          <!-- Assigned Staff List -->
+          <div th:if="${!#lists.isEmpty(rView.assignments)}" style="margin: 12px 0;">
+            <strong>Assigned Crew:</strong>
+            <ul style="margin: 6px 0; padding-left: 20px;">
+              <li th:each="a : ${rView.assignments}">
+                <span th:text="${a.staff.name}">Staff Name</span>
+                <form th:if="${schedule.status == 'DRAFT'}" th:action="@{'/manager/assignments/' + ${a.id} + '/remove'}" method="post" style="display:inline; margin-left: 8px;">
+                  <button type="submit" class="link error" style="font-size: 12px;">Remove</button>
+                </form>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Assign Staff Form (when DRAFT and needed) -->
+          <div th:if="${schedule.status == 'DRAFT' and rView.remaining > 0}" style="margin-top: 14px; border-top: 1px dashed var(--line); padding-top: 12px;">
+            <form th:action="@{'/manager/requirements/' + ${rView.requirement.id} + '/assign'}" method="post" class="inline">
+              <label style="margin: 0; display: flex; gap: 8px; align-items: center;">
+                <span class="small fw-bold">Assign Staff:</span>
+                <select name="staffIds" required style="width: auto;">
+                  <option value="">Select staff member...</option>
+                  <option th:each="s : ${staff}"
+                          th:if="${s.category == rView.requirement.category and s.active}"
+                          th:value="${s.id}"
+                          th:text="${s.name} + ' (' + ${s.category} + ')'">Staff</option>
+                </select>
+              </label>
+              <button type="submit" class="button btn-sm">Assign</button>
+            </form>
+          </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(requirements)}" class="card empty-state">
+          <div class="empty-desc">No staffing requirements defined yet for this schedule. Add one below.</div>
+        </div>
+
+        <!-- Notices Section -->
+        <h2 style="margin-top: 32px;">Shift Notices</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Staff</th>
+                <th>Role</th>
+                <th>Delivery</th>
+                <th>Acknowledgment</th>
+                <th>Resends</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="n : ${notices}">
+                <td><strong th:text="${n.staffName}">Staff</strong></td>
+                <td><span class="badge" th:text="${n.category}">SERVER</span></td>
+                <td><span class="badge" th:text="${n.deliveryStatus}">PENDING</span></td>
+                <td><span class="badge" th:text="${n.acknowledgmentStatus}">PENDING</span></td>
+                <td><span th:text="${n.resendCount}">0</span></td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(notices)}">
+                <td colspan="5" class="muted text-center">No notices issued yet (available once published).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sidebar: Add Requirement & History -->
+      <div>
+        <!-- Add Requirement Card -->
+        <div th:if="${schedule.status == 'DRAFT'}" class="card">
+          <div class="eyebrow">CONFIGURATION</div>
+          <h3>Add Requirement</h3>
+          <form th:action="@{'/manager/schedules/' + ${schedule.id} + '/requirements'}" method="post">
+            <label>
+              Area *
+              <select name="area" required>
+                <option th:each="a : ${areas}" th:value="${a}" th:text="${a}">EVENT</option>
+              </select>
+            </label>
+
+            <label>
+              Category *
+              <select name="category" required>
+                <option th:each="c : ${roles}" th:value="${c}" th:text="${c}">SERVER</option>
+              </select>
+            </label>
+
+            <label>
+              Headcount Needed *
+              <input type="number" name="requiredCount" min="1" max="100" value="1" required>
+            </label>
+
+            <label>
+              Starts At *
+              <input type="datetime-local" name="startsAt" required>
+            </label>
+
+            <label>
+              Ends At *
+              <input type="datetime-local" name="endsAt" required>
+            </label>
+
+            <label>
+              Notes
+              <textarea name="notes" rows="2" placeholder="Requirement notes..."></textarea>
+            </label>
+
+            <button type="submit" class="button" style="width: 100%; margin-top: 12px;">Add Requirement</button>
+          </form>
+        </div>
+
+        <!-- Audit History -->
+        <div class="card">
+          <div class="eyebrow">AUDIT LOG</div>
+          <h3>Recent History</h3>
+          <div style="max-height: 350px; overflow-y: auto;">
+            <div th:each="h : ${history}" style="border-bottom: 1px solid var(--line); padding: 8px 0;">
+              <div><strong th:text="${h.action}">ACTION</strong></div>
+              <div class="small" th:text="${h.detail}">Details</div>
+              <div class="muted small" th:text="${#temporals.format(h.occurredAt, 'MMM dd HH:mm')}">Date</div>
+            </div>
+            <div th:if="${#lists.isEmpty(history)}" class="muted small">No audit records recorded yet.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

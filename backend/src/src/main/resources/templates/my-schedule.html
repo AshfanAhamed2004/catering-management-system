@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('My Schedule')}">
+  <title>My Schedule</title>
+</head>
+<body>
+  <div th:replace="~{fragments/layout :: header('my-schedule')}"></div>
+
+  <main id="my-schedule-app">
+    <!-- Page Alert Banner -->
+    <div id="page-alert" class="alert-container hidden"></div>
+
+    <!-- Staff Header -->
+    <div class="mb-4">
+      <div class="eyebrow">STAFF PORTAL</div>
+      <h1 id="staff-greeting" style="margin: 4px 0 8px;">My Work Schedule</h1>
+      <p class="muted" style="margin: 0;">Review your assigned shifts, catering stations, and event dates.</p>
+    </div>
+
+    <!-- Personal Stats -->
+    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-my-upcoming">0</div>
+        <div class="stat-label">Upcoming Shifts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-my-total">0</div>
+        <div class="stat-label">Total Assigned Shifts</div>
+      </div>
+    </div>
+
+    <!-- Notices & Shift Confirmations (if any) -->
+    <div th:if="${notices != null and !#lists.isEmpty(notices)}" class="card mb-4" style="border-left: 4px solid var(--accent);">
+      <div class="eyebrow" style="color: var(--accent);">SHIFT NOTICES &amp; CONFIRMATIONS</div>
+      <h3 style="margin: 6px 0 14px;">Official Shift Notices</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Shift Window</th>
+              <th>Role</th>
+              <th>Delivery Status</th>
+              <th>Acknowledgment</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="n : ${notices}">
+              <td>
+                <strong th:text="${n.eventReference}">EVT-001</strong>
+                <div class="muted small" th:text="${n.eventName}">Event Name</div>
+              </td>
+              <td>
+                <span th:text="${#temporals.format(n.startsAt, 'MMM dd, yyyy HH:mm')}">Date</span> &ndash;
+                <span th:text="${#temporals.format(n.endsAt, 'HH:mm')}">Time</span>
+              </td>
+              <td>
+                <span class="badge" th:text="${n.category}">SERVER</span>
+                <span class="muted small" th:text="${n.area}">EVENT</span>
+              </td>
+              <td>
+                <span class="badge" th:text="${n.deliveryStatus}">DELIVERED</span>
+              </td>
+              <td>
+                <span class="badge"
+                      th:classappend="${n.acknowledgmentStatus == 'ACKNOWLEDGED'} ? 'badge-published' : 'badge-draft'"
+                      th:text="${n.acknowledgmentStatus}">PENDING</span>
+              </td>
+              <td>
+                <form th:if="${n.acknowledgmentStatus == 'PENDING' and n.deliveryStatus == 'DELIVERED'}"
+                      th:action="@{'/staff/notices/' + ${n.id} + '/acknowledge'}" method="post" style="margin:0;">
+                  <button type="submit" class="button btn-sm">Acknowledge</button>
+                </form>
+                <span th:if="${n.acknowledgmentStatus == 'ACKNOWLEDGED'}" class="muted small">Confirmed</span>
+                <span th:if="${n.deliveryStatus != 'DELIVERED' and n.acknowledgmentStatus == 'PENDING'}" class="muted small">Notice Pending</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- My Shift Assignments Table -->
+    <h2 style="margin: 32px 0 16px;">Assigned Event Shifts</h2>
+
+    <div id="my-shifts-table-container" class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Work Date</th>
+            <th>Shift Time</th>
+            <th>Role &amp; Area</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody id="my-shifts-tbody">
+          <!-- Populated by my-schedule.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div id="my-shifts-empty" class="card empty-state hidden">
+      <div class="empty-icon">&#x1F4C5;</div>
+      <div class="empty-title">No Assigned Shifts</div>
+      <div class="empty-desc">You currently have no scheduled shifts assigned. Please check your declared availability to ensure operations managers can schedule you for upcoming events.</div>
+    </div>
+
+  </main>
+
+  <div th:replace="~{fragments/layout :: footer}"></div>
+
+  <script th:src="@{/js/api.js}"></script>
+  <script th:src="@{/js/my-schedule.js}"></script>
+</body>
+</html>

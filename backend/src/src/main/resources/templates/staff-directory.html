@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Staff Directory')}">
+  <title>Staff Directory</title>
+</head>
+<body>
+  <div th:replace="~{fragments/layout :: header('staff')}"></div>
+
+  <main>
+    <div class="flex-between mb-4" style="flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div class="eyebrow">PERSONNEL &amp; ROLES</div>
+        <h1 style="margin: 4px 0 8px;">Staff Directory</h1>
+        <p class="muted" style="margin: 0;">Manage catering crew, kitchen assistants, chefs, supervisors, and login credentials.</p>
+      </div>
+    </div>
+
+    <div class="split">
+      <div>
+        <h2>Active Staff Members</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Contact</th>
+                <th>Login Email</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="s : ${staff}">
+                <td><strong th:text="${s.name}">Alice</strong></td>
+                <td><span class="badge" th:text="${s.category}">SERVER</span></td>
+                <td><span class="muted small" th:text="${s.contact ?: '—'}">—</span></td>
+                <td><span class="muted small" th:text="${s.user != null ? s.user.email : 'No login'}">email</span></td>
+                <td>
+                  <span class="badge-status"
+                        th:classappend="${s.active} ? 'badge-published' : 'badge-cancelled'"
+                        th:text="${s.active ? 'ACTIVE' : 'INACTIVE'}">ACTIVE</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="eyebrow">NEW PERSONNEL</div>
+          <h3>Register Staff Member</h3>
+          <form th:action="@{/manager/staff}" method="post">
+            <label>
+              Full Name *
+              <input type="text" name="name" required placeholder="e.g., Jane Doe">
+            </label>
+
+            <label>
+              Category / Role *
+              <select name="category" required>
+                <option th:each="c : ${roles}" th:value="${c}" th:text="${c}">SERVER</option>
+              </select>
+            </label>
+
+            <label>
+              Contact Number / Notes
+              <input type="text" name="contact" placeholder="+94 77 123 4567">
+            </label>
+
+            <label>
+              Login Email *
+              <input type="email" name="email" required placeholder="jane.doe@demo.example.com">
+            </label>
+
+            <label>
+              Initial Password *
+              <input type="password" name="password" required placeholder="10-64 chars, letters &amp; numbers">
+            </label>
+
+            <label class="check" style="margin: 16px 0;">
+              <input type="checkbox" name="active" value="true" checked>
+              Active for shift scheduling
+            </label>
+
+            <button type="submit" class="button" style="width: 100%;">Create Staff Account</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

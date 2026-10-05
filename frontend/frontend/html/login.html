@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Sign In')}">
+  <title>Sign In</title>
+</head>
+<body>
+  <div th:replace="~{fragments/layout :: header(null)}"></div>
+
+  <main class="narrow">
+    <div class="card">
+      <div class="eyebrow">PORTAL ACCESS</div>
+      <h1>Sign In</h1>
+      <p class="muted">Access your staff schedules, availability, or operations management.</p>
+
+      <div th:if="${param.error}" class="notice error">
+        <strong>Sign In Failed:</strong> Invalid email or password. Please verify your credentials and try again.
+      </div>
+
+      <div th:if="${param.logout}" class="notice">
+        You have been signed out safely.
+      </div>
+
+      <form th:action="@{/login}" method="post">
+        <label>
+          Login Email
+          <input type="email" name="email" required autofocus placeholder="you@demo.example.com" autocomplete="username">
+        </label>
+
+        <label>
+          Password
+          <input type="password" name="password" required placeholder="Enter password" autocomplete="current-password">
+        </label>
+
+        <div class="actions" style="margin-top: 24px;">
+          <button type="submit" class="button" style="width: 100%;">Sign In</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Demo Credentials Helper -->
+    <div class="card" style="background: #fdfdfc; border-style: dashed;">
+      <div class="eyebrow">DEMO CREDENTIALS</div>
+      <h3>Quick Reference Logins</h3>
+      <dl>
+        <dt>Operations Manager</dt>
+        <dd><code>operations@demo.example.com</code></dd>
+
+        <dt>Chef (Staff)</dt>
+        <dd><code>chef1@demo.example.com</code></dd>
+
+        <dt>Server (Staff)</dt>
+        <dd><code>server1@demo.example.com</code></dd>
+
+        <dt>Supervisor (Staff)</dt>
+        <dd><code>supervisor1@demo.example.com</code></dd>
+      </dl>
+      <p class="muted small" style="margin-top: 10px;">
+        Use the demo password configured in your environment or application properties.
+      </p>
+    </div>
+  </main>
+
+  <div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>
