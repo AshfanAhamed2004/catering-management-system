@@ -68,6 +68,12 @@ public class FeedbackController {
         return Mapping.feedback(f);
     }
 
+    @DeleteMapping("/feedback/{id}")
+    public ResponseEntity<Void> deleteFeedback(@PathVariable Long id, Authentication auth) {
+        feedbackService.deleteFeedback(id, me(auth).getId());
+        return ResponseEntity.noContent().build();
+    }
+
     // --- Staff Endpoints ---
 
     private Specification<Feedback> buildSpecification(FeedbackStatus status, Integer rating, FeedbackCategory category, LocalDate fromDate, LocalDate toDate, String search) {
@@ -98,7 +104,7 @@ public class FeedbackController {
     }
 
     @GetMapping("/staff/feedback")
-    @PreAuthorize("hasAnyRole('CUSTOMER_RELATIONS_OFFICER','ADMIN')")
+    @PreAuthorize("hasAnyRole('CUSTOMER_SERVICE_SUPERVISOR','GENERAL_MANAGER')")
     public List<StaffFeedbackOut> searchFeedback(
             @RequestParam(required = false) FeedbackStatus status,
             @RequestParam(required = false) Integer rating,
@@ -113,7 +119,7 @@ public class FeedbackController {
     }
 
     @GetMapping(value = "/staff/feedback/export", produces = "text/csv")
-    @PreAuthorize("hasAnyRole('CUSTOMER_RELATIONS_OFFICER','ADMIN')")
+    @PreAuthorize("hasAnyRole('CUSTOMER_SERVICE_SUPERVISOR','GENERAL_MANAGER')")
     public ResponseEntity<String> exportFeedback(
             @RequestParam(required = false) FeedbackStatus status,
             @RequestParam(required = false) Integer rating,
@@ -132,7 +138,7 @@ public class FeedbackController {
     }
 
     @GetMapping("/staff/feedback/{id}")
-    @PreAuthorize("hasAnyRole('CUSTOMER_RELATIONS_OFFICER','ADMIN')")
+    @PreAuthorize("hasAnyRole('CUSTOMER_SERVICE_SUPERVISOR','GENERAL_MANAGER')")
     public StaffFeedbackOut getStaffFeedbackDetail(@PathVariable Long id) {
         Feedback f = feedbackRepo.findById(id)
                 .orElseThrow(() -> new com.joy.catering.ApiException(org.springframework.http.HttpStatus.NOT_FOUND, "Feedback not found"));
@@ -140,7 +146,7 @@ public class FeedbackController {
     }
 
     @PutMapping("/staff/feedback/{id}")
-    @PreAuthorize("hasAnyRole('CUSTOMER_RELATIONS_OFFICER','ADMIN')")
+    @PreAuthorize("hasAnyRole('CUSTOMER_SERVICE_SUPERVISOR','GENERAL_MANAGER')")
     public StaffFeedbackOut updateStaffFeedback(
             @PathVariable Long id,
             @Valid @RequestBody StaffFeedbackUpdate input) {
@@ -149,8 +155,15 @@ public class FeedbackController {
     }
 
     @GetMapping("/staff/feedback/report")
-    @PreAuthorize("hasAnyRole('CUSTOMER_RELATIONS_OFFICER','ADMIN')")
-    public FeedbackReportOut getFeedbackReport() {
-        return feedbackService.getFeedbackReport();
+    @PreAuthorize("hasAnyRole('CUSTOMER_SERVICE_SUPERVISOR','GENERAL_MANAGER')")
+    public FeedbackReportOut getFeedbackReport() { return feedbackService.getFeedbackReport(); }
+
+    @DeleteMapping("/staff/feedback/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER_SERVICE_SUPERVISOR','GENERAL_MANAGER')")
+    public ResponseEntity<Void> deleteStaffFeedback(@PathVariable Long id) {
+        feedbackService.deleteStaffFeedback(id);
+        return ResponseEntity.noContent().build();
     }
+
 }
+

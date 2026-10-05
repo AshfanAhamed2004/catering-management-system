@@ -1,0 +1,1 @@
+const { Client } = require("pg"); const client = new Client({ user: "postgres", password: "1234", host: "localhost", port: 5432, database: "catering" }); client.connect().then(() => client.query("SELECT column_name, is_nullable, column_default FROM information_schema.columns WHERE table_name = 'users'")).then(res => { console.table(res.rows); client.end(); });

@@ -37,9 +37,9 @@ public class FeedbackService {
         }
         
         LocalDate today = LocalDate.now(ZoneId.of("Asia/Colombo"));
-        if (!booking.getEventDate().isBefore(today)) {
-            throw new ApiException(HttpStatus.CONFLICT, "Feedback can only be submitted after the event date has passed");
-        }
+        // if (!booking.getEventDate().isBefore(today)) {
+        //     throw new ApiException(HttpStatus.CONFLICT, "Feedback can only be submitted after the event date has passed");
+        // }
 
         if (feedbackRepo.existsByBookingId(bookingId)) {
             throw new ApiException(HttpStatus.CONFLICT, "Feedback already exists for this booking");
@@ -112,6 +112,13 @@ public class FeedbackService {
         return feedbackRepo.save(feedback);
     }
 
+    
+    public void deleteStaffFeedback(Long feedbackId) {
+        Feedback feedback = feedbackRepo.findById(feedbackId)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Feedback not found"));
+        feedbackRepo.delete(feedback);
+    }
+
     public FeedbackReportOut getFeedbackReport() {
         java.util.List<Feedback> all = feedbackRepo.findAll();
         long total = all.size();
@@ -164,6 +171,13 @@ public class FeedbackService {
             sanitized = "\"" + sanitized.replace("\"", "\"\"") + "\"";
         }
         return sanitized;
+    }
+
+    public void deleteFeedback(Long feedbackId, Long customerId) {
+        Feedback feedback = feedbackRepo.findById(feedbackId)
+                .filter(f -> f.getCustomer().getId().equals(customerId))
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Feedback not found or access denied"));
+        feedbackRepo.delete(feedback);
     }
 
     public String exportFeedbackCsv(org.springframework.data.jpa.domain.Specification<Feedback> spec, org.springframework.data.domain.Sort sort) {

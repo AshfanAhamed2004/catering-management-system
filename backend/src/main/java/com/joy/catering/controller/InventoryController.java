@@ -5,11 +5,13 @@ import com.joy.catering.repo.InventoryItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/inventory")
+@PreAuthorize("hasAnyRole('HEAD_CHEF', 'GENERAL_MANAGER', 'EVENT_COORDINATION_OFFICER')")
 public class InventoryController {
     
     @Autowired
@@ -49,3 +51,5 @@ public class InventoryController {
         }).orElse(ResponseEntity.notFound().build());
     }
 }
+
+

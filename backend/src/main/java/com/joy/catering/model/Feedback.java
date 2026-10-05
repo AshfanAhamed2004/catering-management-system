@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "feedbacks")
+@Table(name = "feedbacks", indexes = {
+    @Index(name = "idx_feedback_booking", columnList = "booking_id")
+})
 @Getter
 @Setter
 public class Feedback extends BaseEntity {

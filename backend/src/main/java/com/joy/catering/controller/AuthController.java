@@ -4,9 +4,9 @@ import com.joy.catering.*;import com.joy.catering.dto.Dtos.*;import com.joy.cate
  final AuthService service; final com.joy.catering.repo.UserRepository users; @Value("${app.dev-reset-tokens:false}") boolean devReset;
  public AuthController(AuthService s,com.joy.catering.repo.UserRepository u){service=s;users=u;}
  @PostMapping("/register") ResponseEntity<?> register(@Valid @RequestBody Register d){return ResponseEntity.status(201).body(Mapping.user(service.register(d)));}
- @PostMapping("/login") Object login(@Valid @RequestBody Login d){return java.util.Map.of("access_token",service.login(d),"token_type","bearer");}
- @GetMapping("/me") UserOut me(Authentication a){return Mapping.user((User)a.getPrincipal());}
- @PostMapping("/logout") ResponseEntity<Void> logout(Authentication a){User u=(User)a.getPrincipal();u.setTokenVersion(u.getTokenVersion()+1);users.save(u);return ResponseEntity.noContent().build();}
+ @PostMapping("/login") Object login(@Valid @RequestBody Login d){String token=service.login(d); User u=users.findByEmail(d.email().trim().toLowerCase()).orElse(null); return java.util.Map.of("access_token",token,"token_type","bearer","role",u!=null?u.getRole().name():"CUSTOMER");}
+ @GetMapping("/me") ResponseEntity<?> me(Authentication a){if(a==null||!a.isAuthenticated()||!(a.getPrincipal() instanceof User))return ResponseEntity.status(401).build();return ResponseEntity.ok(Mapping.user((User)a.getPrincipal()));}
+ @PostMapping("/logout") ResponseEntity<Void> logout(Authentication a){if(a==null||!a.isAuthenticated()||!(a.getPrincipal() instanceof User))return ResponseEntity.status(401).build();User u=(User)a.getPrincipal();u.setTokenVersion(u.getTokenVersion()+1);users.save(u);return ResponseEntity.noContent().build();}
  @PostMapping("/forgot-password") Object forgot(@Valid @RequestBody EmailInput d){String token=service.forgot(d,devReset);return devReset ? java.util.Map.of("message","Local development only: use this token in the reset form.","development_token",token) : java.util.Map.of("message","Reset request accepted.");}
  @PostMapping("/reset-password") ResponseEntity<Void> reset(@Valid @RequestBody ResetPassword d){service.reset(d);return ResponseEntity.noContent().build();}
 }

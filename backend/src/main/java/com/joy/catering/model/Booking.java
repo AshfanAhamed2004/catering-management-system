@@ -1,6 +1,10 @@
 package com.joy.catering.model;
 import jakarta.persistence.*; import lombok.Getter; import lombok.Setter; import java.math.BigDecimal; import java.time.*; import java.util.*;
-@Entity @Table(name="bookings") @Getter @Setter
+@Entity 
+@Table(name="bookings", indexes = {
+    @Index(name = "idx_booking_customer", columnList = "customer_id")
+}) 
+@Getter @Setter
 public class Booking extends BaseEntity {
  @Column(nullable=false,unique=true,length=32) private String reference;
  @ManyToOne(fetch=FetchType.EAGER) @JoinColumn(name="customer_id",nullable=false) private User customer;
