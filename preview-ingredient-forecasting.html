@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Gathering · Ingredient Management & Forecasting (CRUD)</title>
+  <style>
+    :root {
+      --color-forest: #203e36;
+      --color-cream: #f7f5ee;
+      --color-panel: #fffdf8;
+      --color-border: #dce0d5;
+      --color-accent: #bb742f;
+      --color-danger: #913d2e;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--color-forest);
+      background: var(--color-cream);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    header {
+      max-width: 1320px;
+      margin: auto;
+      min-height: 90px;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--color-forest);
+      font-family: Georgia, serif;
+      font-size: 26px;
+      line-height: 1.1;
+    }
+    .brand > span:first-child {
+      font-size: 40px;
+    }
+    .brand small {
+      display: block;
+      font-family: Arial, sans-serif;
+      font-size: 9px;
+      letter-spacing: 2.4px;
+      margin-top: 5px;
+      color: #627265;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .badge-branch {
+      background: #e4ebe2;
+      color: #264a38;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #c8d5c3;
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 20px 80px;
+    }
+    .eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+      color: #617162;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 32px;
+      margin: 0 0 12px;
+    }
+    h3 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 22px;
+      margin: 0 0 16px;
+    }
+    .panel {
+      background: var(--color-panel);
+      border: 1px solid var(--color-border);
+      padding: 26px;
+      border-radius: 8px;
+      box-shadow: 0 4px 18px rgba(32, 62, 54, 0.04);
+      margin-bottom: 24px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cdd3c7;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #203e36;
+      background: #fff;
+    }
+    input:focus, select:focus {
+      outline: 2px solid var(--color-forest);
+    }
+    button, .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border: 1px solid var(--color-forest);
+      border-radius: 4px;
+      background: var(--color-forest);
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #315848;
+    }
+    .btn-edit {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .btn-edit:hover {
+      background: #965a20;
+    }
+    .btn-delete {
+      background: var(--color-danger);
+      border-color: var(--color-danger);
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .btn-delete:hover {
+      background: #732a1e;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      margin-top: 14px;
+    }
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #63715e;
+      background: #eef0e7;
+      padding: 12px 14px;
+    }
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #e8ebe1;
+      font-size: 14px;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .crud-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 6px;
+    }
+    .tag-c { background: #e3f2fd; color: #1565c0; }
+    .tag-r { background: #e8f5e9; color: #2e7d32; }
+    .tag-u { background: #fff3e0; color: #e65100; }
+    .tag-d { background: #ffebee; color: #c62828; }
+    footer {
+      max-width: 1320px;
+      margin: auto;
+      border-top: 1px solid var(--color-border);
+      padding: 30px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #6a786d;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="brand" href="#">
+      <span>✳</span>
+      <span>the gathering<small>CATERING & CELEBRATIONS</small></span>
+    </a>
+    <nav>
+      <span class="badge-branch">🌿 Full CRUD & Forecasting (PBI-10)</span>
+      <span style="font-size: 13px;">Student: <strong>IT25101200</strong></span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="eyebrow">Inventory Management & Forecasting</div>
+    <h2>Ingredient CRUD & Forecasting System</h2>
+    <p>Complete module demonstration: Create, Read, Update, Delete ingredients, and calculate event recipe forecasts.</p>
+
+    <!-- 1. CREATE / UPDATE PANEL -->
+    <div class="panel">
+      <h3 id="formTitle"><span class="crud-tag tag-c">CREATE</span> Add New Ingredient</h3>
+      <form id="ingredientForm" class="form-grid">
+        <div class="field">
+          <label>Ingredient Name</label>
+          <input type="text" id="ingName" placeholder="e.g., Basmati Rice" required />
+        </div>
+        <div class="field">
+          <label>Unit</label>
+          <select id="ingUnit">
+            <option value="kg">kg</option>
+            <option value="grams">grams</option>
+            <option value="liters">liters</option>
+            <option value="pcs">pcs</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Stock Quantity</label>
+          <input type="number" step="0.1" id="ingStock" value="20.0" required />
+        </div>
+        <div class="field">
+          <label>Per Guest (kg/unit)</label>
+          <input type="number" step="0.01" id="ingPerGuest" value="0.15" required />
+        </div>
+        <div>
+          <button type="submit" id="submitBtn">Save</button>
+        </div>
+      </form>
+
+      <!-- 2. READ / UPDATE / DELETE TABLE -->
+      <h3 style="margin-top: 24px;"><span class="crud-tag tag-r">READ</span> Ingredient Inventory List</h3>
+      <div style="background: #fff; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden;">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Unit</th>
+              <th>Current Stock</th>
+              <th>Recipe / Guest</th>
+              <th style="text-align: center;">Actions (<span class="crud-tag tag-u">UPDATE</span> / <span class="crud-tag tag-d">DELETE</span>)</th>
+            </tr>
+          </thead>
+          <tbody id="ingredientsTableBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. FORECASTING CALCULATOR PANEL -->
+    <div class="panel">
+      <h3><span class="crud-tag tag-r">FORECAST</span> Calculate Event Requirements</h3>
+      <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 20px;">
+        <label style="font-weight: bold; font-size: 14px;">Expected Guests:</label>
+        <input type="number" id="guestCountInput" value="150" min="1" style="width: 130px;" />
+        <button type="button" onclick="runForecast()">Calculate Requirements</button>
+      </div>
+
+      <div style="background: #fff; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden;">
+        <table>
+          <thead>
+            <tr>
+              <th>Ingredient</th>
+              <th>Formula</th>
+              <th>Required Total</th>
+              <th>In Stock</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="forecastTableBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="brand">the gathering</div>
+    <p style="margin: 0;">Rooted in Sri Lankan hospitality. Made for moments together.</p>
+    <span style="letter-spacing: 2px;">GOOD FOOD. GOOD COMPANY.</span>
+  </footer>
+
+  <script>
+    let inventory = [
+      { id: 1, name: "Basmati Rice", unit: "kg", stock: 30.0, perGuest: 0.15 },
+      { id: 2, name: "Fresh Chicken", unit: "kg", stock: 20.0, perGuest: 0.20 },
+      { id: 3, name: "Mixed Vegetables", unit: "kg", stock: 25.0, perGuest: 0.10 },
+      { id: 4, name: "Cooking Oil", unit: "liters", stock: 8.0, perGuest: 0.03 }
+    ];
+
+    let editId = null;
+
+    function renderTable() {
+      const tbody = document.getElementById('ingredientsTableBody');
+      tbody.innerHTML = '';
+
+      inventory.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color: #667869;">#${item.id}</td>
+          <td><strong>${item.name}</strong></td>
+          <td>${item.unit}</td>
+          <td>${item.stock} ${item.unit}</td>
+          <td>${item.perGuest} ${item.unit}</td>
+          <td style="text-align: center;">
+            <button class="btn btn-edit" onclick="startEdit(${item.id})">Edit</button>
+            <button class="btn btn-delete" onclick="deleteItem(${item.id})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      runForecast();
+    }
+
+    // CREATE or UPDATE
+    document.getElementById('ingredientForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('ingName').value.trim();
+      const unit = document.getElementById('ingUnit').value;
+      const stock = parseFloat(document.getElementById('ingStock').value) || 0;
+      const perGuest = parseFloat(document.getElementById('ingPerGuest').value) || 0;
+
+      if (editId) {
+        // UPDATE (U)
+        const item = inventory.find(i => i.id === editId);
+        if (item) {
+          item.name = name;
+          item.unit = unit;
+          item.stock = stock;
+          item.perGuest = perGuest;
+        }
+        editId = null;
+        document.getElementById('formTitle').innerHTML = '<span class="crud-tag tag-c">CREATE</span> Add New Ingredient';
+        document.getElementById('submitBtn').textContent = 'Save';
+      } else {
+        // CREATE (C)
+        const newId = inventory.length ? Math.max(...inventory.map(i => i.id)) + 1 : 1;
+        inventory.push({ id: newId, name, unit, stock, perGuest });
+      }
+
+      document.getElementById('ingredientForm').reset();
+      renderTable();
+    });
+
+    // START EDIT (U)
+    function startEdit(id) {
+      const item = inventory.find(i => i.id === id);
+      if (!item) return;
+      editId = id;
+      document.getElementById('ingName').value = item.name;
+      document.getElementById('ingUnit').value = item.unit;
+      document.getElementById('ingStock').value = item.stock;
+      document.getElementById('ingPerGuest').value = item.perGuest;
+
+      document.getElementById('formTitle').innerHTML = '<span class="crud-tag tag-u">UPDATE</span> Edit Ingredient #' + id;
+      document.getElementById('submitBtn').textContent = 'Update';
+      document.getElementById('ingName').focus();
+    }
+
+    // DELETE (D)
+    function deleteItem(id) {
+      if (confirm('Are you sure you want to delete this ingredient?')) {
+        inventory = inventory.filter(i => i.id !== id);
+        renderTable();
+      }
+    }
+
+    // FORECAST CALCULATION
+    function runForecast() {
+      const guests = parseInt(document.getElementById('guestCountInput').value) || 0;
+      const tbody = document.getElementById('forecastTableBody');
+      tbody.innerHTML = '';
+
+      inventory.forEach(item => {
+        const required = (guests * item.perGuest).toFixed(2);
+        const shortage = parseFloat(required) > item.stock;
+        const diff = (parseFloat(required) - item.stock).toFixed(2);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${item.name}</strong></td>
+          <td style="color: #667869;">${guests} guests × ${item.perGuest} ${item.unit}</td>
+          <td><strong>${required} ${item.unit}</strong></td>
+          <td>${item.stock} ${item.unit}</td>
+          <td>
+            ${shortage 
+              ? `<span style="background: #fde8e3; color: #9c3320; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px;">Deficit: Order ${diff} ${item.unit}</span>` 
+              : `<span style="background: #e2f0de; color: #2b6127; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px;">In Stock</span>`}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Initial render
+    renderTable();
+  </script>
+</body>
+</html>
